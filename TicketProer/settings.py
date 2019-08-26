@@ -27,7 +27,7 @@ SECRET_KEY = get_env('SECRET_KEY', 'abccd')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_env('DEBUG', True, bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
