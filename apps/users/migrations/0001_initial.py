@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=150)),
                 ('email', models.EmailField(max_length=254)),
                 ('description', models.TextField()),
-                ('profile_image', models.ImageField(blank=True, null=True, upload_to=tools.image_funcs.get_image_path)),
+                ('profile_image', models.ImageField(blank=True, null=True, upload_to=tools.image_funcs.get_profile_image_path)),
             ],
             options={
                 'abstract': False,
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('profile_image', models.ImageField(blank=True, null=True, upload_to=tools.image_funcs.get_image_path)),
+                ('profile_image', models.ImageField(blank=True, null=True, upload_to=tools.image_funcs.get_profile_image_path)),
                 ('email', models.EmailField(max_length=254, verbose_name='email address')),
                 ('first_name', models.CharField(blank=True, max_length=30, null=True, verbose_name='first name')),
                 ('last_name', models.CharField(blank=True, max_length=150, null=True, verbose_name='last name')),
