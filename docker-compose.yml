@@ -6,7 +6,6 @@ services:
     ports:
       - "5432:5432"
   web:
-    env_file: test_env_vars.env
     build:
       context: .
       dockerfile: Dockerfile

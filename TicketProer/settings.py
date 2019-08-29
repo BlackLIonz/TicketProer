@@ -81,10 +81,10 @@ WSGI_APPLICATION = 'TicketProer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': get_env('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': get_env('DB_NAME', 'django_db'),
-        'USER': get_env('DB_USER', 'admin'),
+        'NAME': get_env('DB_NAME', 'postgres'),
+        'USER': get_env('DB_USER', 'postgres'),
         'PASSWORD': get_env('DB_PASSWORD', 'admin'),
-        'HOST': get_env('DB_HOST', '127.0.0.1'),
+        'HOST': get_env('DB_HOST', 'db'),
         'PORT': get_env('DB_POST', '5432')
     }
 }
