@@ -1,5 +1,8 @@
 Django==2.2.4
+django-debug-toolbar==2.0
+djangorestframework==3.10.2
 Pillow==6.1.0
 psycopg2-binary==2.8.3
 pytz==2019.2
+requests==2.7.0
 sqlparse==0.3.0
