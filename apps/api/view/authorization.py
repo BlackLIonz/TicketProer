@@ -10,6 +10,8 @@ from rest_framework.status import (
 )
 from rest_framework.response import Response
 
+from apps.users.models import User
+
 
 @csrf_exempt
 @api_view(["POST"])
@@ -18,7 +20,7 @@ def login(request):
     """
     Gets username, password. Returns auth-token.
     """
-    username = request.data.get('username')
+    username = request.data.get(User.USERNAME_FIELD)
     password = request.data.get('password')
     if username is None or password is None:
         return Response({'error': 'Please provide both username and password'},
