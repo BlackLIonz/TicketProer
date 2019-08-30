@@ -1,1 +1,1 @@
-from .authorization import login
+from .authorization import login, register, logout
