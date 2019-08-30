@@ -36,10 +36,11 @@ def login(request):
                     status=HTTP_200_OK)
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def logout(request):
-    pass
+    request.user.auth_token.delete()
+    return Response('Successful logout', status=HTTP_200_OK)
 
 
 @csrf_exempt
