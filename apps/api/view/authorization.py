@@ -16,7 +16,7 @@ from apps.users.serializers import UserSerializer
 
 
 @csrf_exempt
-@api_view(["POST"])
+@api_view(['POST'])
 @permission_classes((AllowAny,))
 def login(request):
     """
