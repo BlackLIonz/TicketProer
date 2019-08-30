@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=64)),
                 ('description', models.TextField()),
-                ('poster', models.ImageField(blank=True, null=True, upload_to=tools.image_funcs.get_image_path(''))),
+                ('poster', models.ImageField(blank=True, null=True, upload_to=tools.image_funcs.get_image_path)),
                 ('organizer_id', models.UUIDField()),
                 ('date', models.DateTimeField()),
                 ('duration', models.DurationField()),
