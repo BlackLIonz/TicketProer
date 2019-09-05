@@ -56,13 +56,23 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework.authentication.TokenAuthentication',
+        ]
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'apps.users.serializers.RegistrSerializer',
+    'REGISTER_SERIALIZER': 'apps.users.serializers.UserSerializer',
 }
 
+# REST_AUTH_SERIALIZERS = {
+#     'LOGIN_SERIALIZER': 'apps.users.serializers.LoginSerializer'
+# }
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 SITE_ID = 1
