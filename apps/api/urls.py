@@ -9,7 +9,6 @@ authpatterns = [
     path('logout/', LogoutView.as_view()),
 ]
 
-
 urlpatterns = [
     path(r'auth/', include(authpatterns)),
 ]

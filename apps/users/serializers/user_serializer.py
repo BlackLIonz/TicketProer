@@ -31,8 +31,3 @@ class UserSerializer(serializers.ModelSerializer):
             u.is_valid()
             self.instance = self.create(u.validated_data)
         return self.instance
-
-
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True, allow_blank=True)
-    password = serializers.CharField(style={'input_type': 'password'})

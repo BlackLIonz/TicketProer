@@ -66,10 +66,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'apps.users.serializers.UserSerializer',
 }
 
-# REST_AUTH_SERIALIZERS = {
-#     'LOGIN_SERIALIZER': 'apps.users.serializers.LoginSerializer'
-# }
-
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
