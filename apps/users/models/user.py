@@ -8,7 +8,7 @@ from apps.base.models import BaseAbstractModel
 
 class User(AbstractUser, BaseAbstractModel):
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     profile_image = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     email = models.EmailField('email address', blank=False, null=False, unique=True)
