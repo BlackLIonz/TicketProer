@@ -15,7 +15,7 @@ authpatterns = [
 ]
 
 router = DefaultRouter()
-router.register(r'events', event_views.EventViewSet, basename='event')
+router.register(r'events', event_views.EventViewSet, basename='events')
 router.register(r'places', location_views.PlaceViewSet, basename='place')
 
 urlpatterns = [

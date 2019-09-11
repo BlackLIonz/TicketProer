@@ -39,13 +39,6 @@ class Event(BaseAbstractModel):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        try:
-            self.organizer = self.organizer.membership.organization
-        except self.organizer._meta.model.membership.RelatedObjectDoesNotExist:
-            pass
-        super().save(self, *args, **kwargs)
-
     # TODO
     # @property
     # def rating(self):
