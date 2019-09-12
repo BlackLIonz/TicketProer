@@ -22,14 +22,10 @@ class EventAdmin(admin.ModelAdmin):
 
     def response_change(self, request, obj):
         if '_make-approve' in request.POST:
-            matching_names_except_this = self.get_queryset(request).filter(name=obj.name).exclude(pk=obj.id)
-            matching_names_except_this.delete()
             obj.is_approved = True
             obj.save()
             return HttpResponseRedirect('.')
         elif '_make-reject'in request.POST:
-            matching_names_except_this = self.get_queryset(request).filter(name=obj.name).exclude(pk=obj.id)
-            matching_names_except_this.delete()
             obj.is_approved = False
             obj.save()
             return HttpResponseRedirect('.')
