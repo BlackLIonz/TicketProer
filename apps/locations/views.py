@@ -1,4 +1,5 @@
-from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 from apps.locations.models import Place, Address
@@ -24,6 +25,14 @@ class AddressViewSet(viewsets.ModelViewSet):
     permission_classes = (ActionBasedPermission,)
     action_permissions = {
         AllowAny: ['retrieve', 'list'],
-        IsAuthenticated: ['create'],
-        IsAdminUser: ['update', 'partial_update', 'destroy']
+        IsAuthenticated: ['create', 'update', 'partial_update'],
+        IsAdminUser: ['destroy']
     }
+
+    def perform_update(self, serializer):
+        if self.request.user is not serializer.created_by:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        serializer.save()
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
