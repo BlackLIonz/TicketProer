@@ -19,4 +19,4 @@ class Address(BaseAbstractModel):
 
     def __str__(self):
         return ', '.join([str(item) for item in
-                         (self.country, self.city, self.street, self.house, self.apartments) if item])
+                         (self.country, self.city, self.street, self.house, self.floor, self.apartments) if item])

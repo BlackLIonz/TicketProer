@@ -52,15 +52,16 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.locations',
     'apps.events',
+    'apps.subscriptions',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-            'rest_framework.authentication.TokenAuthentication',
-        ]
+            'rest_framework.authentication.TokenAuthentication'],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
@@ -93,7 +94,7 @@ ROOT_URLCONF = 'TicketProer.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

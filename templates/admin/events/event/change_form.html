@@ -1,0 +1,9 @@
+{% extends 'admin/change_form.html' %}
+
+{% block submit_buttons_bottom %}
+    <div class="submit-row">
+            <input type="submit" value="Approve" name="_make-approve">
+            <input type="submit" value="Reject" name="_make-reject">
+            <a href="/admin/events/event/" class="closelink">Close</a>
+    </div>
+{% endblock %}

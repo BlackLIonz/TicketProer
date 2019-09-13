@@ -4,7 +4,6 @@ from django.contrib.contenttypes.models import ContentType
 
 from apps.base.models import BaseAbstractModel
 from apps.locations.models import Place, Address
-from apps.users.models import MembersList, User, Organization
 
 from tools.image_funcs import get_image_path
 
@@ -38,13 +37,6 @@ class Event(BaseAbstractModel):
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        try:
-            self.organizer = self.organizer.membership.organization
-        except self.organizer._meta.model.membership.RelatedObjectDoesNotExist:
-            pass
-        super().save(self, *args, **kwargs)
 
     # TODO
     # @property
