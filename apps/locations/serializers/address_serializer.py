@@ -11,5 +11,6 @@ class AddressSerializer(serializers.ModelSerializer):
         extra_kwargs = {
                         'id': {'read_only': True},
                         'created': {'read_only': True},
-                        'updated': {'read_only': True}
+                        'updated': {'read_only': True},
+                        'created_by': {'read_only': True}
                         }
