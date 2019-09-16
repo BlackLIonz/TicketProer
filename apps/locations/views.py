@@ -32,9 +32,8 @@ class AddressViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        if not request.user.is_staff:
-            if request.user.id != instance.created_by.id:
-                return Response(status=status.HTTP_403_FORBIDDEN)
+        if not request.user.is_staff and request.user.id != instance.created_by.id:
+            return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
