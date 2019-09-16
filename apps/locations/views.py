@@ -20,7 +20,7 @@ class PlaceViewSet(viewsets.ModelViewSet):
     }
 
     def create(self, request, *args, **kwargs):
-        data_dict = dict(**request.data)
+        data_dict = request.data.dict()
         data = data_dict.pop('address')
         if data is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)

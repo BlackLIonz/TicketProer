@@ -3,6 +3,7 @@ from pytest_factoryboy import register
 from rest_auth.models import TokenModel
 from rest_auth.app_settings import create_token, TokenSerializer
 
+from apps.locations.models import Place
 from apps.users.factories import UserFactory
 from apps.locations.factories import PlaceFactory
 
@@ -32,7 +33,7 @@ def place_dict():
             "house": "17A",
             "description": "My home"
         },
-        "status": "WORKING",
+        "status": Place.STATUS_WORKING,
         "description": "Shota's house"
     }
 
