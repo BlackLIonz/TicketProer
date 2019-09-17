@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from apps.users.factories import UserFactory
+from apps.users.factories import UserFactory, MemberListFactory
 from apps.locations.factories import AddressFactory, PlaceFactory
 from apps.events.factories import (
     EventUserWithoutPlaceFactory,
@@ -34,6 +34,7 @@ class Command(BaseCommand):
         EventUserWithoutPlaceFactory.create_batch(size=event_user_addr)
         EventOrganizerWithPlaceFactory.create_batch(size=event_org_addr_place)
         EventOrganizerWithoutPlaceFactory.create_batch(size=event_org_addr)
+        MemberListFactory.create_batch(size=small)
         UserFactory.create_batch(size=instances_without_event)
         AddressFactory.create_batch(size=instances_without_event)
         PlaceFactory.create_batch(size=instances_without_event)

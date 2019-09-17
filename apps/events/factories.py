@@ -1,5 +1,7 @@
+import random
 import factory
 import factory.fuzzy
+import pytz
 
 from faker import Factory as FakeFactory
 from django.contrib.contenttypes.models import ContentType
@@ -7,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from apps.users.models import Organization
 from apps.events.models import Event
 
-from apps.users.factories import UserFactory, MemberListFactory
+from apps.users.factories import UserFactory, OrganizationFactory
 from apps.locations.factories import AddressFactory, PlaceFactory
 
 
@@ -22,10 +24,10 @@ class EventAbstractFactory(factory.django.DjangoModelFactory):
     organizer_type = factory.LazyAttribute(
         lambda o: ContentType.objects.get_for_model(o.organizer)
     )
-    date = factory.Faker('past_datetime', start_date='-30d')
+    date = factory.Faker('past_datetime', start_date='-30d', tzinfo=pytz.UTC)
     duration = factory.Faker('time')
-    age_rate = factory.Faker('pyint', min_value=0, max_value=50, step=1)
-    max_members = factory.Faker('pyint', min_value=10, max_value=10000, step=1)
+    age_rate = factory.LazyAttribute(lambda x: random.randint(0, 50))
+    max_members = factory.LazyAttribute(lambda x: random.randint(10, 10000))
     is_top = factory.Faker('boolean', chance_of_getting_true=50)
     is_hot = factory.Faker('boolean', chance_of_getting_true=50)
     status = factory.fuzzy.FuzzyChoice(Event.STATUS_TYPES, getter=lambda c: c[0])
@@ -55,7 +57,7 @@ class EventUserWithPlaceFactory(EventAbstractFactory):
 
 
 class EventOrganizerWithoutPlaceFactory(EventAbstractFactory):
-    organizer = factory.SubFactory(MemberListFactory)
+    organizer = factory.SubFactory(OrganizationFactory)
     organizer_type = factory.LazyAttribute(
         lambda x: ContentType.objects.get_for_model(Organization)
     )
@@ -67,7 +69,7 @@ class EventOrganizerWithoutPlaceFactory(EventAbstractFactory):
 
 
 class EventOrganizerWithPlaceFactory(EventAbstractFactory):
-    organizer = factory.SubFactory(MemberListFactory)
+    organizer = factory.SubFactory(OrganizationFactory)
     organizer_type = factory.LazyAttribute(
         lambda x: ContentType.objects.get_for_model(Organization)
     )

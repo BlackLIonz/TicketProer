@@ -10,5 +10,8 @@ class Organization(BaseAbstractModel):
     description = models.TextField(blank=True, null=True)
     approved = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name

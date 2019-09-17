@@ -37,7 +37,7 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
 class MemberListFactory(factory.django.DjangoModelFactory):
     """Organization and user connection"""
     member = factory.SubFactory(UserFactory)
-    organization = factory.SubFactory(OrganizationFactory)
+    organization = factory.Iterator(Organization.objects.filter(memberslist__isnull=True))
 
     class Meta:
         model = MembersList

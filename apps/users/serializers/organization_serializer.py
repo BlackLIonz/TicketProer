@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from apps.users.models import Organization
 
 
 class OrganizationSerializer(serializers.Serializer):
@@ -9,3 +10,8 @@ class OrganizationSerializer(serializers.Serializer):
     description = serializers.CharField(allow_blank=True, allow_null=True)
     approved = serializers.BooleanField(default=False)
 
+
+class ShortOrganizationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = ['name', 'email']

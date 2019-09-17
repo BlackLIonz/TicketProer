@@ -14,9 +14,6 @@ class PlaceSerializer(serializers.Serializer):
 
 
 class ShortPlaceSerializer(serializers.ModelSerializer):
-    """
-    Place serializer without address info
-    """
     class Meta:
         model = Place
-        exclude = ['address']
+        exclude = ['address', 'updated']

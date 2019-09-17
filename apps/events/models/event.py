@@ -38,6 +38,10 @@ class Event(BaseAbstractModel):
     def __str__(self):
         return self.name
 
+    @property
+    def registered_users(self):
+        return self.subscribers.all().count()
+
     # TODO
     # @property
     # def rating(self):

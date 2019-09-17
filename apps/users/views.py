@@ -18,5 +18,3 @@ class UserDataForStaffView(APIView):
             raise NotFound("User does not exist")
         serializer = UserSerializer(user)
         return Response(serializer.data, status=HTTP_200_OK)
-
-

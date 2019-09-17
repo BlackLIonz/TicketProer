@@ -33,3 +33,9 @@ class UserSerializer(serializers.ModelSerializer):
             user_ser.is_valid()
             self.instance = self.create(user_ser.validated_data)
         return self.instance
+
+
+class ShortUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
