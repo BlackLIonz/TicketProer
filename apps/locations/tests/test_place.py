@@ -1,5 +1,4 @@
 import pytest
-import faker
 from rest_framework import status
 
 
@@ -32,7 +31,3 @@ class TestPlaces:
         assert res.status_code == status.HTTP_200_OK
         assert isinstance(res.json(), list)
         assert len(res.json()) == place_qty
-
-    def test_detail_error(self, client):
-        res = client.get(f'api/places/{faker.Faker().random_number()}/')
-        assert res.status_code == status.HTTP_404_NOT_FOUND

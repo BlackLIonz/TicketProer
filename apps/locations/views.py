@@ -1,4 +1,6 @@
-from rest_framework import viewsets, status
+import json
+
+from rest_framework import viewsets, status, exceptions
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
@@ -20,7 +22,7 @@ class PlaceViewSet(viewsets.ModelViewSet):
     }
 
     def create(self, request, *args, **kwargs):
-        data_dict = request.data.dict()
+        data_dict = request.data
         data = data_dict.pop('address')
         if data is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -34,4 +36,4 @@ class PlaceViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer, **kwargs):
-        Place.objects.create(**kwargs, **serializer.validated_data)
+        return Place.objects.create(**kwargs, **serializer.validated_data)

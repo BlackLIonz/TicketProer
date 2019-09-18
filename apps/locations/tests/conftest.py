@@ -34,7 +34,7 @@ def place_dict():
             "description": "My home"
         },
         "status": Place.STATUS_WORKING,
-        "description": "Shota's house"
+        "description": "house"
     }
 
 

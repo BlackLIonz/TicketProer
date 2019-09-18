@@ -2,7 +2,7 @@ from django.db import models
 
 from tools.image_funcs import get_image_path
 from apps.base.models.base import BaseAbstractModel
-from apps.locations.models.address import Address
+from apps.locations.models import Address
 
 
 class Place(BaseAbstractModel):
