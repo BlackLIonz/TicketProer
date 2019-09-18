@@ -29,11 +29,13 @@ class PlaceViewSet(viewsets.ModelViewSet):
         address_ser = AddressSerializer(data=data)
         address_ser.is_valid()
         address = Address.objects.create(**address_ser.validated_data)
-        serializer = self.get_serializer(data=data_dict)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=data_dict)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer, address=address)
+        place = self.perform_create(serializer, address=address)
+        place_data = serializer_class(place).data
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(place_data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer, **kwargs):
         return Place.objects.create(**kwargs, **serializer.validated_data)
