@@ -5,8 +5,7 @@ from rest_auth.app_settings import create_token, TokenSerializer
 
 from apps.locations.models import Place
 from apps.users.factories import UserFactory
-from apps.locations.factories import PlaceFactory
-
+from apps.locations.factories import PlaceFactory, AddressFactory
 
 register(UserFactory, 'user')
 register(PlaceFactory, 'place')
@@ -20,6 +19,11 @@ def token(user):
 
 @pytest.fixture
 def place_qty():
+    return 1
+
+
+@pytest.fixture
+def address_qty():
     return 1
 
 
@@ -41,3 +45,8 @@ def place_dict():
 @pytest.fixture
 def places(place_qty):
     return PlaceFactory.create_batch(size=place_qty)
+
+
+@pytest.fixture
+def addresses(place_qty):
+    return AddressFactory.create_batch(size=address_qty)
