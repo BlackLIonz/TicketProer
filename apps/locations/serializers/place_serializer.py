@@ -14,7 +14,7 @@ class PlaceSerializer(serializers.ModelSerializer):
             'id': {'read_only': True},
             'created': {'read_only': True},
             'updated': {'read_only': True},
-            'status': {'read_only': True}
+            'status': {'read_only': True},
         }
 
 

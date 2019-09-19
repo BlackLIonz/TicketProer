@@ -1,5 +1,5 @@
 import json
-
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status, exceptions
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
@@ -21,21 +21,44 @@ class PlaceViewSet(viewsets.ModelViewSet):
         IsAdminUser: ['destroy', 'create', 'update', 'partial_update'],
     }
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        self._update_address(instance)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
     def create(self, request, *args, **kwargs):
-        data_dict = request.data
-        data = data_dict.pop('address')
-        if data is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        address_ser = AddressSerializer(data=data)
-        address_ser.is_valid()
-        address = Address.objects.create(**address_ser.validated_data)
+        data = request.data
+        address = self._create_address()
         serializer_class = self.get_serializer_class()
-        serializer = serializer_class(data=data_dict)
+        serializer = serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
         place = self.perform_create(serializer, address=address)
         place_data = serializer_class(place).data
         headers = self.get_success_headers(serializer.data)
         return Response(place_data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def _create_address(self):
+        if 'address' in self.request.data:
+            address_data = self.request.data.pop('address')
+        else:
+            raise exceptions.ParseError('Address field is empty')
+        address_ser = AddressSerializer(data=address_data)
+        if address_ser.is_valid():
+            return Address.objects.create(**address_ser.validated_data)
+        else:
+            raise exceptions.ParseError('Address invalid')
+
+    def _update_address(self, instance):
+        data = self.request.data
+        if 'address' in data:
+            address_id = data.pop('address')
+            address_instance = get_object_or_404(Address, id=address_id)
+            instance.address = address_instance
 
     def perform_create(self, serializer, **kwargs):
         return Place.objects.create(**kwargs, **serializer.validated_data)

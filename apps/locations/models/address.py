@@ -1,6 +1,7 @@
 from django.db import models
 
 from apps.base.models.base import BaseAbstractModel
+from apps.users.models import User
 
 
 class Address(BaseAbstractModel):
@@ -11,6 +12,7 @@ class Address(BaseAbstractModel):
     floor = models.PositiveSmallIntegerField(blank=True, null=True)
     apartments = models.CharField(max_length=10, blank=True, null=True)
     description = models.CharField(max_length=200, blank=True, null=True)
+    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='addresses')
 
     def __str__(self):
         return ', '.join([str(item) for item in
