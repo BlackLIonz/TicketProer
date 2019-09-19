@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from apps.locations.models import Place, Address
 from apps.locations.serializers import PlaceSerializer, AddressSerializer
 from tools.action_based_permission import ActionBasedPermission
-from tools.custom_permisions import IsOwnerOrAdmin
+from tools.custom_permissions import IsOwnerOrAdmin
 
 
 class PlaceViewSet(viewsets.ReadOnlyModelViewSet):
