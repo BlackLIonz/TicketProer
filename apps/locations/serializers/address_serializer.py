@@ -11,7 +11,3 @@ class AddressSerializer(serializers.ModelSerializer):
             'created': {'read_only': True},
             'updated': {'read_only': True},
         }
-
-
-
-
