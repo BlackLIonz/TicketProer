@@ -27,3 +27,6 @@ class Review(BaseAbstractModel):
     parent_object = GenericForeignKey('parent_object_type', 'parent_object_id')
     parent_object_id = models.UUIDField()
     status = models.CharField(max_length=16, choices=STATUS_TYPES, default=OK)
+
+    class Meta:
+        unique_together = ['parent_type_id', 'created_by']
