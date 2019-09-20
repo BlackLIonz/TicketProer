@@ -22,10 +22,11 @@ class Review(BaseAbstractModel):
         validators.MinValueValidator(1)
     ])
     text = models.TextField()
-    created_by = models.ForeignKey(User, null=False, blank=False, on_delete=models.SET_NULL, related_name='reviews')
+    created_by = models.ForeignKey(User, editable=False, null=False, blank=False,
+                                   on_delete=models.SET_NULL, related_name='reviews')
     parent_object_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     parent_object = GenericForeignKey('parent_object_type', 'parent_object_id')
-    parent_object_id = models.UUIDField()
+    parent_object_id = models.UUIDField(editable=False)
     status = models.CharField(max_length=16, choices=STATUS_TYPES, default=OK)
 
     class Meta:
