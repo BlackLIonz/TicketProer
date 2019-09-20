@@ -1,10 +1,15 @@
+import json
+import random
+
 import pytest
 from rest_framework import status
 
+from apps.locations.models import Place
+
 
 @pytest.mark.django_db
-class TestAddress:
-    def test_create_address(self, client, user, token, place_dict):
+class TestPlace:
+    def test_create_place_with_address_dict(self, client, user, token, place_dict):
         user.is_staff = True
         user.save()
         res = client.post('/api/places/', data=json.dumps(place_dict), content_type='application/json',
@@ -14,7 +19,20 @@ class TestAddress:
         assert res_place['id']
         db_place = Place.objects.get(id=res_place['id'])
         assert db_place.name == res_place.get('name')
-        assert db_place.description == res_place.get('description')
+        assert db_place.status == res_place.get('status')
+        assert str(db_place.address.id) == res_place.get('address').get('id')
+
+    @pytest.mark.parametrize('place_qty', [10, 50])
+    def test_create_place_with_address_id(self, client, user, token, place_qty, place_dict_address_id):
+        user.is_staff = True
+        user.save()
+        res = client.post('/api/places/', data=json.dumps(place_dict_address_id), content_type='application/json',
+                          **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
+        assert res.status_code == status.HTTP_201_CREATED
+        res_place = res.json()
+        assert res_place['id']
+        db_place = Place.objects.get(id=res_place['id'])
+        assert db_place.name == res_place.get('name')
         assert db_place.status == res_place.get('status')
         assert str(db_place.address.id) == res_place.get('address').get('id')
 

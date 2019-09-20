@@ -47,11 +47,14 @@ class PlaceViewSet(viewsets.ModelViewSet):
             address_data = self.request.data.pop('address')
         else:
             raise exceptions.ParseError('Address field is empty')
-        address_ser = AddressSerializer(data=address_data)
-        if address_ser.is_valid():
-            return Address.objects.create(**address_ser.validated_data)
-        else:
-            raise exceptions.ParseError('Address invalid')
+        if isinstance(address_data, str):
+            return Address.objects.get(pk=address_data)
+        elif isinstance(address_data, dict):
+            address_ser = AddressSerializer(data=address_data)
+            if address_ser.is_valid():
+                return Address.objects.create(**address_ser.validated_data)
+            else:
+                raise exceptions.ParseError('Address invalid')
 
     def _update_address(self, instance):
         data = self.request.data

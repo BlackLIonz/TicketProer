@@ -9,7 +9,7 @@ from apps.locations.factories import PlaceFactory, AddressFactory
 
 register(UserFactory, 'user')
 register(PlaceFactory, 'place')
-register(PlaceFactory, 'address')
+register(AddressFactory, 'address')
 
 
 @pytest.fixture
@@ -30,15 +30,26 @@ def address_qty():
 @pytest.fixture
 def place_dict():
     return {
-        "name": "Home",
-        "address": {
-            "country": "Belarus",
-            "city": "Minsk",
-            "house": "17A",
-            "description": "My home"
+        'name': 'Home',
+        'address': {
+            'country': 'Belarus',
+            'city': 'Minsk',
+            'house': '17A',
+            'description': 'My home'
         },
-        "status": Place.STATUS_WORKING,
-        "description": "house",
+        'status': Place.STATUS_WORKING,
+        'description': 'house',
+    }
+
+
+@pytest.fixture
+def place_dict_address_id():
+    address = AddressFactory()
+    return {
+        'name': 'Home',
+        'address': str(address.id),
+        'status': Place.STATUS_WORKING,
+        'description': 'house',
     }
 
 
