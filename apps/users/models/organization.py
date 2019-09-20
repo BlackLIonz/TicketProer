@@ -1,5 +1,6 @@
-from tools.image_funcs import get_image_path
 from django.db import models
+
+from tools.image_funcs import get_image_path
 from apps.base.models import BaseAbstractModel
 
 

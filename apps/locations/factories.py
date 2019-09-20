@@ -12,7 +12,6 @@ faker = FakeFactory.create()
 
 
 class AddressFactory(factory.django.DjangoModelFactory):
-    """Address factory"""
     country = factory.LazyAttribute(lambda x: faker.country()[:30])
     city = factory.LazyAttribute(lambda x: faker.city()[:30])
     street = factory.LazyAttribute(lambda x: faker.street_name()[:30])
@@ -27,7 +26,6 @@ class AddressFactory(factory.django.DjangoModelFactory):
 
 
 class PlaceFactory(factory.django.DjangoModelFactory):
-    """Place factory"""
     name = factory.LazyAttribute(lambda x: faker.company()[:75])
     address = factory.SubFactory(AddressFactory)
     description = factory.Faker('text', max_nb_chars=200, ext_word_list=None)

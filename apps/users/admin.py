@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User, Organization, MembersList
+
+from apps.users.models import User, Organization, MembersList
 
 
 class MembershipInLine(admin.StackedInline):

@@ -4,16 +4,24 @@ from apps.locations.models.place import Place
 from apps.locations.serializers.address_serializer import AddressSerializer
 
 
-class PlaceSerializer(serializers.Serializer):
-    id = serializers.UUIDField(read_only=True)
-    name = serializers.CharField(max_length=75, allow_blank=False, allow_null=False)
+class PlaceSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
-    photo = serializers.ImageField(required=False, allow_empty_file=True, allow_null=True)
-    description = serializers.CharField(max_length=200, allow_blank=True, allow_null=True)
-    status = serializers.ChoiceField(choices=Place.STATUS_CHOICES)
+
+    class Meta:
+        model = Place
+        fields = '__all__'
+        extra_kwargs = {'id': {'read_only': True},
+                        'created': {'read_only': True},
+                        'updated': {'read_only': True},
+                        'status': {'read_only': True},
+                        }
 
 
 class ShortPlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
         exclude = ['address', 'updated']
+        extra_kwargs = {'id': {'read_only': True},
+                        'created': {'read_only': True},
+                        'status': {'read_only': True},
+                        }

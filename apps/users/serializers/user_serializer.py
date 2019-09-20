@@ -38,4 +38,5 @@ class UserSerializer(serializers.ModelSerializer):
 class ShortUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['id', 'username', 'email']
+        extra_kwargs = {'id': {'read_only': True}}

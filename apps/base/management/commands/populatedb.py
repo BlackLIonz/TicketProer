@@ -24,11 +24,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         big = options.get('great_count') or DEFAULT_BIG_NUMBER
         small = options.get('less_count') or DEFAULT_SMALL_NUMBER
-        event_user_addr_place = (big-small)//2
-        event_user_addr = (big-small) - event_user_addr_place
-        event_org_addr_place = small//2
+        event_user_addr_place = (big - small) // 2
+        event_user_addr = (big - small) - event_user_addr_place
+        event_org_addr_place = small // 2
         event_org_addr = small - event_org_addr_place
-        instances_without_event = small//4
+        instances_without_event = small // 4
 
         EventUserWithPlaceFactory.create_batch(size=event_user_addr_place)
         EventUserWithoutPlaceFactory.create_batch(size=event_user_addr)

@@ -1,8 +1,8 @@
 import pytest
-
-from apps.users.tests.factories.users import UserFactory
 from pytest_factoryboy import register
 from rest_auth.models import TokenModel
+
+from apps.users.factories import UserFactory
 
 token_model = TokenModel
 register(UserFactory, 'user')
