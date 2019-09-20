@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'apps.events',
     'apps.subscriptions',
     'apps.api'
+    'apps.feedback',
 ]
 
 REST_FRAMEWORK = {
