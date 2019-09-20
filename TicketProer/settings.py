@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'apps.locations',
     'apps.events',
     'apps.subscriptions',
-    'apps.api'
-    'apps.feedback',
+    'apps.api',
+    'apps.feedbacks',
 ]
 
 REST_FRAMEWORK = {

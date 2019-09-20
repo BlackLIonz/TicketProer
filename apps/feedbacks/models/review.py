@@ -23,11 +23,11 @@ class Review(BaseAbstractModel):
     ])
     text = models.TextField()
     created_by = models.ForeignKey(User, editable=False, null=False, blank=False,
-                                   on_delete=models.SET_NULL, related_name='reviews')
+                                   on_delete=models.CASCADE, related_name='reviews')
     parent_object_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     parent_object = GenericForeignKey('parent_object_type', 'parent_object_id')
     parent_object_id = models.UUIDField(editable=False)
     status = models.CharField(max_length=16, choices=STATUS_TYPES, default=OK)
 
     class Meta:
-        unique_together = ['parent_type_id', 'created_by']
+        unique_together = ['parent_object_id', 'created_by']
