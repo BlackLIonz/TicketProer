@@ -39,7 +39,7 @@ class PlaceViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         place = self.perform_create(serializer, address=address)
         place_data = serializer_class(place).data
-        headers = self.get_success_headers(serializer.data)
+        headers = self.get_success_headers(place_data)
         return Response(place_data, status=status.HTTP_201_CREATED, headers=headers)
 
     def _create_address(self):
