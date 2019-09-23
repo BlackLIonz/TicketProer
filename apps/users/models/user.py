@@ -1,8 +1,8 @@
-from tools.image_funcs import get_image_path
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from apps.base.models import BaseAbstractModel
+from tools.image_funcs import get_image_path
 
 
 class User(AbstractUser, BaseAbstractModel):

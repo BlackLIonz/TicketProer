@@ -1,12 +1,14 @@
-from django.urls import re_path, path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path, include
 from rest_auth.registration.views import RegisterView
 from rest_auth.views import LogoutView, LoginView
-from apps.events import views as event_views
-from apps.locations import views as location_views
+
+from apps.locations.urls import placepatterns
+from apps.events.urls import eventpatterns
 from apps.users.urls import userpatterns
 
-app_name = "api"
+
+app_name = 'api'
+
 
 authpatterns = [
     path('registration/', RegisterView.as_view()),
@@ -14,14 +16,10 @@ authpatterns = [
     path('logout/', LogoutView.as_view()),
 ]
 
-router = DefaultRouter()
-router.register(r'events', event_views.EventViewSet, basename='events')
-router.register(r'places', location_views.PlaceViewSet, basename='place')
-router.register(r'addresses', location_views.AddressViewSet, basename='address')
 
 urlpatterns = [
-    path(r'auth/', include(authpatterns)),
-    path(r'user/', include(userpatterns))
+    path('auth/', include(authpatterns)),
+    path('users/', include(userpatterns)),
+    path('places/', include(placepatterns)),
+    path('events/', include(eventpatterns)),
 ]
-
-urlpatterns += router.urls

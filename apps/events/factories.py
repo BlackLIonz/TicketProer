@@ -1,14 +1,13 @@
 import random
+
 import factory
 import factory.fuzzy
 import pytz
-
 from faker import Factory as FakeFactory
 from django.contrib.contenttypes.models import ContentType
 
 from apps.users.models import Organization
 from apps.events.models import Event
-
 from apps.users.factories import UserFactory, OrganizationFactory
 from apps.locations.factories import AddressFactory, PlaceFactory
 
@@ -17,7 +16,6 @@ faker = FakeFactory.create()
 
 
 class EventAbstractFactory(factory.django.DjangoModelFactory):
-    """Abstract Event factory"""
     name = factory.LazyAttribute(lambda x: faker.catch_phrase()[:64])
     description = factory.Faker('text', max_nb_chars=200, ext_word_list=None)
     organizer_id = factory.SelfAttribute('organizer.id')
@@ -43,7 +41,6 @@ class EventUserWithoutPlaceFactory(EventAbstractFactory):
 
     class Meta:
         model = Event
-        abstract = False
 
 
 class EventUserWithPlaceFactory(EventAbstractFactory):
@@ -53,7 +50,6 @@ class EventUserWithPlaceFactory(EventAbstractFactory):
 
     class Meta:
         model = Event
-        abstract = False
 
 
 class EventOrganizerWithoutPlaceFactory(EventAbstractFactory):
@@ -65,7 +61,6 @@ class EventOrganizerWithoutPlaceFactory(EventAbstractFactory):
 
     class Meta:
         model = Event
-        abstract = False
 
 
 class EventOrganizerWithPlaceFactory(EventAbstractFactory):
@@ -79,4 +74,3 @@ class EventOrganizerWithPlaceFactory(EventAbstractFactory):
 
     class Meta:
         model = Event
-        abstract = False

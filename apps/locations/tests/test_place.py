@@ -1,6 +1,5 @@
 import pytest
 import faker
-
 from rest_framework import status
 
 
@@ -27,7 +26,7 @@ class TestPlaces:
         assert place_dict.get('description') == place.description
         assert place_dict.get('status') == place.status
 
-    @pytest.mark.parametrize('place_qty', [0, 1, 10, 100])
+    @pytest.mark.parametrize('place_qty', [0, 1, 10, 50])
     def test_list(self, client, places, place_qty):
         res = client.get('/api/places/')
         assert res.status_code == status.HTTP_200_OK

@@ -18,7 +18,7 @@ class Place(BaseAbstractModel):
     address = models.OneToOneField(Address, related_name='place', on_delete=models.PROTECT)
     photo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     description = models.CharField(max_length=200, blank=True, null=True)
-    status = models.CharField(max_length=18, choices=STATUS_CHOICES, blank=False, null=False)
+    status = models.CharField(max_length=18, choices=STATUS_CHOICES, blank=False, null=False, default=STATUS_WORKING)
 
     def __str__(self):
         return self.name

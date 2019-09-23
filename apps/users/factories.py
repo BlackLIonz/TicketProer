@@ -1,5 +1,4 @@
 import factory
-
 from faker import Factory as FakeFactory
 
 from apps.users.models import User, Organization, MembersList
@@ -9,7 +8,6 @@ faker = FakeFactory.create()
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-    """User factory"""
     username = factory.Faker('user_name')
     password = factory.Faker('password')
     email = factory.Faker('email')
@@ -19,11 +17,9 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = User
-        abstract = False
 
 
 class OrganizationFactory(factory.django.DjangoModelFactory):
-    """Organization factory"""
     name = factory.Faker('company')
     email = factory.Faker('email')
     approved = factory.Faker('boolean', chance_of_getting_true=60)
@@ -31,14 +27,11 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Organization
-        abstract = False
 
 
 class MemberListFactory(factory.django.DjangoModelFactory):
-    """Organization and user connection"""
     member = factory.SubFactory(UserFactory)
     organization = factory.Iterator(Organization.objects.filter(memberslist__isnull=True))
 
     class Meta:
         model = MembersList
-        abstract = False

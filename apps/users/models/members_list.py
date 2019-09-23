@@ -1,4 +1,5 @@
 from django.db import models
+
 from apps.base.models import BaseAbstractModel
 from apps.users.models import Organization, User
 
