@@ -69,8 +69,8 @@ class TestAddress:
 
     def test_update_not_valid_data(self, client, address_dict, token, user):
         new_address = {'floor': '5', 'city': 'Tbilisi'}
-        client.post('/api/addresses/', data=address_dict, **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
-        address = Address.objects.get(created_by=user)
+        res = client.post('/api/addresses/', data=address_dict, **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
+        address = Address.objects.get(id=res.json().get('id'))
         res = client.put(f'/api/addresses/{str(address.id)}/', data=json.dumps(new_address),
                          content_type='application/json', **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
         assert res.status_code == status.HTTP_400_BAD_REQUEST
