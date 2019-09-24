@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('rating', models.PositiveSmallIntegerField(validators=[django.core.validators.MaxValueValidator(10), django.core.validators.MinValueValidator(1)])),
-                ('text', models.TextField()),
+                ('text', models.TextField(null=False, blank=False)),
                 ('parent_object_id', models.UUIDField(editable=False)),
                 ('status', models.CharField(choices=[('OK', 'ok'), ('SUSPICIOUS', 'suspicious'), ('DELETED', 'deleted')], default='OK', max_length=16)),
                 ('created_by', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to=settings.AUTH_USER_MODEL)),

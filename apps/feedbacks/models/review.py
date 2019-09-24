@@ -21,7 +21,7 @@ class Review(BaseAbstractModel):
         validators.MaxValueValidator(10),
         validators.MinValueValidator(1)
     ])
-    text = models.TextField()
+    text = models.TextField(null=False, blank=False)
     created_by = models.ForeignKey(User, editable=False, null=False, blank=False,
                                    on_delete=models.CASCADE, related_name='reviews')
     parent_object_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
