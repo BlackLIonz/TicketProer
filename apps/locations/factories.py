@@ -7,6 +7,7 @@ from faker import Factory as FakeFactory
 from apps.locations.models import Address, Place
 from apps.users.factories import UserFactory
 
+
 faker = FakeFactory.create()
 
 

@@ -16,7 +16,6 @@ authpatterns = [
     path('logout/', LogoutView.as_view()),
 ]
 
-
 urlpatterns = [
     path('auth/', include(authpatterns)),
     path('users/', include(userpatterns)),

@@ -9,11 +9,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'email', 'password', 'id', 'is_staff', 'is_active', 'created',
                   'updated', 'profile_image', 'first_name', 'last_name', 'date_of_birth']
-        extra_kwargs = {'id': {'read_only': True},
-                        'created': {'read_only': True},
-                        'updated': {'read_only': True},
+        extra_kwargs = {
                         'password': {'write_only': True},
                         'is_staff': {'read_only': True},
+                        'created': {'read_only': True},
+                        'updated': {'read_only': True},
+                        'id': {'read_only': True},
                         'is_active': {'read_only': True}
                         }
 

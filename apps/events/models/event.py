@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+
+import pytz
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -40,3 +43,11 @@ class Event(BaseAbstractModel):
     @property
     def registered_users(self):
         return self.subscribers.all().count()
+
+    @property
+    def is_available_for_feedback(self):
+        return True if self.date <= datetime.utcnow().replace(tzinfo=pytz.utc) else False
+
+    @property
+    def is_available_for_subscription(self):
+        return True if datetime.utcnow().replace(tzinfo=pytz.utc) <= self.date - timedelta(hours=1) else False

@@ -16,9 +16,12 @@ class Subscription(BaseAbstractModel):
         (STATUS_UNPAID, 'Unpaid'),
         (STATUS_UNTRACKED, 'Untracked')
     ]
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='subscribers')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='subscribers')
     status = models.CharField(max_length=9, choices=STATUS_CHOICES, blank=False, null=False, default=STATUS_UNTRACKED)
 
     class Meta:
-        unique_together = ['user_id', 'event_id']
+        unique_together = ['user', 'event']
+
+    def __str__(self):
+        return f'{self.event.name}: {self.user.email}'

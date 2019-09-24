@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 
 from apps.users.factories import UserFactory, MemberListFactory
 from apps.locations.factories import AddressFactory, PlaceFactory
+from apps.subscriptions.factories import SubscriptionFactory
 from apps.events.factories import (
     EventUserWithoutPlaceFactory,
     EventUserWithPlaceFactory,
@@ -38,4 +39,5 @@ class Command(BaseCommand):
         UserFactory.create_batch(size=instances_without_event)
         AddressFactory.create_batch(size=instances_without_event)
         PlaceFactory.create_batch(size=instances_without_event)
+        SubscriptionFactory.create_batch(size=small)
         self.stdout.write(self.style.SUCCESS("DB was successfully populated"))
