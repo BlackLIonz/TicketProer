@@ -31,3 +31,6 @@ class Review(BaseAbstractModel):
 
     class Meta:
         unique_together = ['parent_object_id', 'created_by']
+
+    def __str__(self):
+        return f'{self.created_by.username} to {self.parent_object.name}'

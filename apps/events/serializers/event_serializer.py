@@ -30,7 +30,7 @@ class EventSerializer(serializers.ModelSerializer):
         """
         organizer_type_mapping = {
             ContentType.objects.get_for_model(User): user_serializers.ShortUserSerializer,
-            ContentType.objects.get_for_model(Organization): user_serializers.ShortOrganizationSerializer
+            ContentType.objects.get_for_model(Organization): user_serializers.OrganizationSerializer
         }
         serializer_class = organizer_type_mapping.get(obj.organizer_type)
         return serializer_class(obj.organizer).data

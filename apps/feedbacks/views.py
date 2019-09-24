@@ -32,11 +32,13 @@ class ReviewViewSet(viewsets.ModelViewSet):
         user = request.user
         data = request.data
         parent_object = self.get_parent(data)
-        serializer = self.get_serializer(data=data)
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer, created_by=user, parent_object=parent_object)
+        review = self.perform_create(serializer, created_by=user, parent_object=parent_object)
+        review_data = serializer_class(review).data
         # headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(review_data, status=status.HTTP_201_CREATED)
 
     def get_parent(self, data):
         parent_object_id = data.pop('parent_object')

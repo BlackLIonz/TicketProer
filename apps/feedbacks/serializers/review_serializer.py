@@ -37,8 +37,8 @@ class ReviewSerializer(serializers.ModelSerializer):
         """
         Method to fill out the organizer field in serializer
         """
-        serializer_class = self.parent_object_type_mapping.get(obj.organizer_type)
-        return serializer_class(obj.organizer).data
+        serializer_class = self.parent_object_type_mapping.get(obj.parent_object_type)
+        return serializer_class(obj.parent_object).data
 
     def get_parent_object_type(self, obj=None):
         """
