@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='place',
             name='photo',
-            field=models.ImageField(default='static/Place/none.png', upload_to=tools.image_funcs.get_image_path),
+            field=models.ImageField(default='static/Place/base_image.png', upload_to=tools.image_funcs.get_image_path),
         ),
     ]
