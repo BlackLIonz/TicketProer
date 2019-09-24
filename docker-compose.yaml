@@ -24,5 +24,4 @@ services:
     volumes:
       - .:/code
     depends_on:
-      - db
       - redis
