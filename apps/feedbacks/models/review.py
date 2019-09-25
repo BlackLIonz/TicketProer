@@ -33,4 +33,4 @@ class Review(BaseAbstractModel):
         unique_together = ['parent_object_id', 'created_by']
 
     def __str__(self):
-        return f'{self.created_by.username} to {self.parent_object.name}'
+        return f'Review from {self.created_by.username} on {self.parent_object.name}'

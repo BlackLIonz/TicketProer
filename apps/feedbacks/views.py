@@ -1,12 +1,11 @@
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import _get_queryset
 from rest_framework import viewsets, status, exceptions
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from apps.events.models import Event
-from apps.feedbacks.serializers import ReviewSerializer
 from apps.feedbacks.models import Review
+from apps.feedbacks.serializers import ReviewSerializer
 from apps.locations.models import Place
 from apps.users.models import Organization
 from tools.action_based_permission import ActionBasedPermission
@@ -30,21 +29,23 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         user = request.user
-        data = request.data
-        parent_object = self.get_parent(data)
+        data = dict(request.data)
+        parent_object = self._get_parent(data)
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
         review = self.perform_create(serializer, created_by=user, parent_object=parent_object)
         review_data = serializer_class(review).data
-        # headers = self.get_success_headers(serializer.data)
-        return Response(review_data, status=status.HTTP_201_CREATED)
+        headers = self.get_success_headers(review_data)
+        return Response(review_data, status=status.HTTP_201_CREATED, headers=headers)
 
-    def get_parent(self, data):
+    def _get_parent(self, data):
         parent_object_id = data.pop('parent_object')
         parent_object = (get_object_or_None(Place, pk=parent_object_id) or
                          get_object_or_None(Event, pk=parent_object_id) or
                          get_object_or_None(Organization, pk=parent_object_id))
+        if parent_object is None:
+            raise exceptions.NotFound('Place/Event/Organization not found')
         parent_object_type = ContentType.objects.get_for_model(parent_object.__class__)
         data['parent_object_it'] = parent_object_id
         data['parent_object_type'] = parent_object_type
