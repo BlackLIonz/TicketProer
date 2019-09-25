@@ -1,8 +1,6 @@
 from django.db import models
 
 from apps.base.models import BaseAbstractModel
-from apps.events.models import Event
-from apps.users.models import User
 
 
 class Subscription(BaseAbstractModel):
@@ -10,14 +8,16 @@ class Subscription(BaseAbstractModel):
     STATUS_REJECTED = 'REJECTED'
     STATUS_UNPAID = 'UNPAID'
     STATUS_UNTRACKED = 'UNTRACKED'
+    STATUS_CANCELLED = 'CANCELLED'
     STATUS_CHOICES = [
         (STATUS_ACTIVE, 'Active'),
         (STATUS_REJECTED, 'Rejected'),
         (STATUS_UNPAID, 'Unpaid'),
-        (STATUS_UNTRACKED, 'Untracked')
+        (STATUS_UNTRACKED, 'Untracked'),
+        (STATUS_CANCELLED, 'Cancelled')
     ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='subscribers')
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='subscriptions')
+    event = models.ForeignKey('events.Event', on_delete=models.CASCADE, related_name='subscribers')
     status = models.CharField(max_length=9, choices=STATUS_CHOICES, blank=False, null=False, default=STATUS_UNTRACKED)
 
     class Meta:

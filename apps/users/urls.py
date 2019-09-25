@@ -2,7 +2,7 @@ from django.urls import path
 from rest_auth.views import UserDetailsView
 from rest_framework.routers import DefaultRouter
 
-
+from apps.subscriptions.views import SubscriptionListView
 from apps.users import views
 
 
@@ -12,7 +12,8 @@ router.register(r'', views.UserDataForStaffViewSet, basename='user')
 userpatterns = [
     path('me/', UserDetailsView.as_view()),
     path('me/events/', views.UserEventsViewSet.as_view({'get': 'list'})),
-    path('me/events/<str:event_id>/detailed/', UserEventsViewSet.as_view({'get': 'retrieve'})),
+    path('me/events/<str:event_id>/detailed/', views.UserEventsViewSet.as_view({'get': 'retrieve'})),
+    path('me/subscriptions/', SubscriptionListView.as_view({'get': 'list'})),
 ]
 
 userpatterns += router.urls
