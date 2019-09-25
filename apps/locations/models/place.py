@@ -1,11 +1,11 @@
 from django.db import models
 
 from tools.image_funcs import get_image_path
-from apps.base.models.base import BaseAbstractModel
+from apps.base.models import BaseAbstractModel, ParentTopicRelationModel
 from apps.locations.models import Address
 
 
-class Place(BaseAbstractModel):
+class Place(BaseAbstractModel, ParentTopicRelationModel):
     STATUS_WORKING = 'WORKING'
     STATUS_TEMPORARILY_CLOSED = 'TEMPORARILY_CLOSED'
     STATUS_CLOSED = 'CLOSED'

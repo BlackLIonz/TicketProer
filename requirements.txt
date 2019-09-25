@@ -1,4 +1,6 @@
+celery==4.3.0
 django-allauth==0.40.0
+django-celery-beat==1.5.0
 django-debug-toolbar==2.0
 django-filter==2.2.0
 django-rest-auth==0.9.5
@@ -13,6 +15,7 @@ pytest-factoryboy==2.0.3
 pytest==5.1.2
 python-dateutil==2.8.0
 pytz==2019.2
+redis==3.3.8
 requests==2.7.0
 six==1.12.0
 sqlparse==0.3.0

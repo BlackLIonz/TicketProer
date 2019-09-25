@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from apps.users.models import Organization, User
 from apps.events.models import Event
 from apps.locations.serializers import ShortPlaceSerializer, AddressSerializer
-from apps.users.serializers import ShortUserSerializer, ShortOrganizationSerializer
+import apps.users.serializers as user_serializers
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -29,8 +29,8 @@ class EventSerializer(serializers.ModelSerializer):
         Method to fill out the organizer field in serializer
         """
         organizer_type_mapping = {
-            ContentType.objects.get_for_model(User): ShortUserSerializer,
-            ContentType.objects.get_for_model(Organization): ShortOrganizationSerializer
+            ContentType.objects.get_for_model(User): user_serializers.ShortUserSerializer,
+            ContentType.objects.get_for_model(Organization): user_serializers.ShortOrganizationSerializer
         }
         serializer_class = organizer_type_mapping.get(obj.organizer_type)
         return serializer_class(obj.organizer).data

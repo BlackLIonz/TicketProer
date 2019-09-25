@@ -5,6 +5,8 @@ services:
     image: postgres:11.5-alpine
     ports:
       - "5432:5432"
+  redis:
+    image: "redis:alpine"
   web:
     build:
       context: .
@@ -16,3 +18,10 @@ services:
       - "8000:8000"
     depends_on:
       - db
+  celery:
+    build: .
+    command: celery -A TicketProer worker -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - redis

@@ -5,12 +5,12 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-from apps.base.models import BaseAbstractModel
+from apps.base.models import BaseAbstractModel, ParentTopicRelationModel
 from apps.locations.models import Place, Address
 from tools.image_funcs import get_image_path
 
 
-class Event(BaseAbstractModel):
+class Event(BaseAbstractModel, ParentTopicRelationModel):
     SOON = "SOON"
     SUCCEED = "SUCCEED"
     REJECTED = "REJECTED"

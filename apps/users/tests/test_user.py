@@ -32,4 +32,3 @@ class TestUsers:
     def test_self_details_authorized_false(self, client):
         response = client.get('/api/users/me/')
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-

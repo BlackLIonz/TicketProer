@@ -4,7 +4,7 @@ from rest_auth.views import LogoutView, LoginView
 
 from apps.locations.urls import placepatterns, addresspatterns
 from apps.events.urls import eventpatterns
-from apps.users.urls import userpatterns
+from apps.users.urls import userpatterns, organizationpatterns
 
 
 app_name = 'api'
@@ -22,4 +22,5 @@ urlpatterns = [
     path('places/', include(placepatterns)),
     path('events/', include(eventpatterns)),
     path('addresses/', include(addresspatterns)),
+    path('organizations/', include(organizationpatterns))
 ]
