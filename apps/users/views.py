@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
 
-
+from apps.base.views import ReviewsMixin
 from apps.events.models import Event
 from apps.events.serializers import EventSerializer
 from apps.subscriptions.serializers import SubscriptionSerializer

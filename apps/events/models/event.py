@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
 import pytz
-from django.db import models
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 
 from apps.base.models import BaseAbstractModel
 from apps.locations.models import Place, Address
@@ -36,6 +36,11 @@ class Event(BaseAbstractModel):
     is_top = models.BooleanField(default=False)
     max_members = models.PositiveIntegerField(blank=False, null=False)
     status = models.CharField(max_length=16, choices=STATUS_TYPES, default=SOON)
+    reviews = GenericRelation(
+        'feedbacks.Review',
+        content_type_field='parent_object_type',
+        object_id_field='parent_object_id',
+    )
 
     def __str__(self):
         return self.name

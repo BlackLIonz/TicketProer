@@ -18,6 +18,11 @@ class Organization(BaseAbstractModel):
         object_id_field='organizer_id',
         related_name='events'
     )
+    reviews = GenericRelation(
+        'feedbacks.Review',
+        content_type_field='parent_object_type',
+        object_id_field='parent_object_id',
+    )
 
     class Meta:
         ordering = ['name']

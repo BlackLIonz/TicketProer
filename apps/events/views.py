@@ -6,6 +6,7 @@ from rest_framework import viewsets, mixins, status, exceptions, filters as rest
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from apps.base.views import ReviewsMixin
 from apps.users.models import User
 from apps.locations.models import Place, Address
 from apps.locations.serializers import AddressSerializer
@@ -27,7 +28,8 @@ class EventFilter(PlaceFilter, AddressFilter, DateFilter):
 
 
 class EventViewSet(mixins.CreateModelMixin,
-                   viewsets.ReadOnlyModelViewSet):
+                   viewsets.ReadOnlyModelViewSet,
+                   ReviewsMixin):
     """
     A ViewSet which provides `retrieve()`,
     `list()` and `create()` actions
@@ -36,7 +38,7 @@ class EventViewSet(mixins.CreateModelMixin,
     serializer_class = EventSerializer
     permission_classes = (ActionBasedPermission,)
     action_permissions = {
-        AllowAny: ['retrieve', 'list'],
+        AllowAny: ['retrieve', 'list', 'reviews'],
         IsAuthenticated: ['create'],
     }
     filter_backends = [filters.DjangoFilterBackend, rest_filters.OrderingFilter]
