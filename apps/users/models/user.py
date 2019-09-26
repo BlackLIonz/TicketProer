@@ -3,6 +3,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 from apps.base.models import BaseAbstractModel
+from apps.subscriptions.models import Subscription
 from tools.image_funcs import get_image_path
 
 
@@ -21,3 +22,7 @@ class User(AbstractUser, BaseAbstractModel):
         object_id_field='organizer_id',
         related_name='events'
     )
+
+    @property
+    def all_active_subscriptions(self):
+        return self.subscriptions.exclude(status=Subscription.STATUS_CANCELLED)
