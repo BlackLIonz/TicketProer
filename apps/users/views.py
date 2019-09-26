@@ -7,7 +7,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.status import HTTP_200_OK
-from rest_framework.views import APIView
 
 
 from apps.events.models import Event
@@ -57,11 +56,7 @@ class UserEventsViewSet(viewsets.ReadOnlyModelViewSet):
 
 class OrganizationsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
-
-    def list(self, request, *args, **kwargs):
-        organizations = self.get_queryset()
-        serializer = ShortOrganizationSerializer(organizations, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
+    serializer_class = ShortOrganizationSerializer
 
     def retrieve(self, request, *args, **kwargs):
         organization = get_object_or_404(self.get_queryset(), id=kwargs.get('organization_id'))
