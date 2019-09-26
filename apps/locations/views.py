@@ -14,13 +14,14 @@ from tools.custom_permissions import IsOwnerOrAdmin
 
 class PlaceViewSet(viewsets.ModelViewSet, ReviewsMixin):
     """
-    A ViewSet for listing and retrieving Places
+    A viewset that provides `create()`, `retrieve()`, `update()`,
+    `partial_update()`, `destroy()` and `list()` actions.
     """
     queryset = Place.objects.all()
     serializer_class = PlaceSerializer
     permission_classes = (ActionBasedPermission,)
     action_permissions = {
-        AllowAny: ['retrieve', 'list' 'reviews'],
+        AllowAny: ['retrieve', 'list', 'reviews'],
         IsAdminUser: ['destroy', 'create', 'update', 'partial_update'],
     }
 

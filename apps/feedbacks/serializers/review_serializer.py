@@ -40,7 +40,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         """
         serializer_class = self.parent_object_type_mapping.get(obj.parent_object_type)
         data = serializer_class(obj.parent_object).data
-        return {'id': str(data.get('id'))}
+        return data
 
     def get_parent_object_type(self, obj=None):
         """

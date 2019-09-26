@@ -10,7 +10,7 @@ from apps.feedbacks.serializers import ReviewSerializer
 from apps.locations.models import Place
 from apps.users.models import Organization
 from tools.action_based_permission import ActionBasedPermission
-from tools.custom_permissions import IsOwnerOrAdmin
+from tools.custom_permissions import IsOwnerOrAdmin, IsVisited
 from tools.shortcuts import get_object_or_None
 
 
@@ -33,11 +33,36 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = (ActionBasedPermission,)
     action_permissions = {
         AllowAny: ['retrieve', 'list'],
-        IsAuthenticated: ['create'],  # will changed on IsVisited
+        IsVisited: ['create'],
         IsOwnerOrAdmin: ['destroy', 'update', 'partial_update'],
     }
     filter_backends = [filters.DjangoFilterBackend, rest_filters.OrderingFilter]
     filterset_class = RatingFilter
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Review.objects.all()
+        else:
+            return Review.objects.filter(status__exact=Review.DELETED)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.status = Review.DELETED
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def perform_destroy(self, instance):
+        instance.save()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         user = request.user

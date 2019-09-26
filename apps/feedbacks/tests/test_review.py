@@ -8,7 +8,7 @@ from apps.feedbacks.models import Review
 
 
 @pytest.mark.django_db
-class TestAddress:
+class TestReview:
     def test_create_with_event(self, client, review_dict, user, token, event):
         review_dict['parent_object'] = str(event.id)
         res = client.post('/api/reviews/',
@@ -47,7 +47,7 @@ class TestAddress:
 
     @pytest.mark.parametrize('review_qty', [10])
     def test_retrieve(self, client, reviews, review_qty):
-        random_review = random.choice(Review.objects.all())
+        random_review = random.choice(Review.objects.filter(status__exact=Review.DELETED))
         res = client.get(f'/api/reviews/{random_review.id}/')
         assert res.status_code == status.HTTP_200_OK
         res_dict = res.json()
@@ -60,7 +60,7 @@ class TestAddress:
         res = client.get(f'/api/reviews/')
         assert res.status_code == status.HTTP_200_OK
         res_dict = res.json()
-        assert len(res_dict) == len(reviews)
+        assert len(res_dict) != len(reviews)
 
     def test_partial_update(self, client, user, token, reviews, review_dict):
         user.is_staff = True
