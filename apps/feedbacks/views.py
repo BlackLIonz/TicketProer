@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
+from django.db import IntegrityError
 from django_filters import rest_framework as filters
 from rest_framework import viewsets, status, exceptions, filters as rest_filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -43,7 +44,18 @@ class ReviewViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return Review.objects.all()
         else:
-            return Review.objects.filter(status__exact=Review.DELETED)
+            return Review.objects.filter(status__in=[Review.OK, Review.SUSPICIOUS])
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        if instance.status == Review.DELETED:
+            raise exceptions.PermissionDenied('You can not create reviews on it')
+        instance.status = Review.OK
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -91,4 +103,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return parent_object
 
     def perform_create(self, serializer, **kwargs):
-        return Review.objects.create(**kwargs, **serializer.validated_data)
+        try:
+            review = Review.objects.create(**kwargs, **serializer.validated_data)
+        except IntegrityError:
+            raise exceptions.APIException(detail='Review already exists', code=status.HTTP_400_BAD_REQUEST)
+        return review

@@ -47,7 +47,7 @@ class TestReview:
 
     @pytest.mark.parametrize('review_qty', [10])
     def test_retrieve(self, client, reviews, review_qty):
-        random_review = random.choice(Review.objects.filter(status__exact=Review.DELETED))
+        random_review = random.choice(Review.objects.filter(status__in=[Review.OK, Review.SUSPICIOUS]))
         res = client.get(f'/api/reviews/{random_review.id}/')
         assert res.status_code == status.HTTP_200_OK
         res_dict = res.json()
@@ -61,7 +61,7 @@ class TestReview:
         random_review = random.choice(reviews)
         res = client.delete(f'/api/reviews/{random_review.id}/', **{'HTTP_AUTHORIZATION': f'Token {token}'})
         assert res.status_code == status.HTTP_204_NO_CONTENT
-        assert random_review not in list(Review.objects.filter(status__exact=Review.DELETED))
+        assert random_review not in list(Review.objects.filter(status__in=[Review.OK, Review.SUSPICIOUS]))
 
     @pytest.mark.parametrize('review_qty', [10])
     def test_list(self, client, reviews, review_qty):
