@@ -1,8 +1,6 @@
 from rest_framework import filters as rest_filters, viewsets
-from django_filters import rest_framework  as filters
+from django_filters import rest_framework as filters
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
 
 
 from apps.subscriptions.models import Subscription
@@ -18,7 +16,7 @@ class SubscriptionFilter(filters.FilterSet):
         fields = ['user', 'event', 'status', 'event__date__lte', 'event__date__gte']
 
 
-class SubscriptionListView(viewsets.ReadOnlyModelViewSet):
+class SubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
 
     model = Subscription
     serializer_class = SubscriptionSerializer
@@ -30,11 +28,5 @@ class SubscriptionListView(viewsets.ReadOnlyModelViewSet):
 
     permission_classes = [IsAuthenticated]
 
-    def list(self, request, *args, **kwargs):
-        response = self.filter_queryset(self.get_queryset())
-        serializer = SubscriptionSerializer(response, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
-
     def get_queryset(self):
-        user = self.request.user
-        return user.all_active_subscriptions
+        return self.request.user.all_active_subscriptions
