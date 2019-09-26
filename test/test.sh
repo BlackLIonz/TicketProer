@@ -1,3 +1,3 @@
 #! /bin/bash
 
-pytest -vv --ds=TicketProer.settings apps/
+pytest -vv --ds=TicketProer.settings apps/feedbacks

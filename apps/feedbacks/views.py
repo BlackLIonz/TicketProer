@@ -106,5 +106,5 @@ class ReviewViewSet(viewsets.ModelViewSet):
         try:
             review = Review.objects.create(**kwargs, **serializer.validated_data)
         except IntegrityError:
-            raise exceptions.APIException(detail='Review already exists', code=status.HTTP_400_BAD_REQUEST)
+            review = Review.objects.get(**kwargs).update(**kwargs, **serializer)
         return review

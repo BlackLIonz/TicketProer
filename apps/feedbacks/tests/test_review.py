@@ -59,7 +59,7 @@ class TestReview:
         user.is_staff = True
         user.save()
         random_review = random.choice(reviews)
-        res = client.delete(f'/api/reviews/{random_review.id}/', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+        res = client.delete(f'/api/reviews/{random_review.id}/', **{'HTTP_AUTHORIZATION': f'Token {user.auth_token}'})
         assert res.status_code == status.HTTP_204_NO_CONTENT
         assert random_review not in list(Review.objects.filter(status__in=[Review.OK, Review.SUSPICIOUS]))
 
@@ -77,7 +77,7 @@ class TestReview:
         res = client.put(f'/api/reviews/{random_review.id}/',
                          data=json.dumps(review_dict),
                          content_type='application/json',
-                         **{'HTTP_AUTHORIZATION': f'Token {token}'})
+                         **{'HTTP_AUTHORIZATION': f'Token {user.auth_token}'})
         assert res.status_code == status.HTTP_200_OK
         res_dict = res.json()
         assert res_dict.get('text') == review_dict['text']

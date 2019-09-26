@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 from apps.base.models.base import BaseAbstractModel
+from apps.feedbacks.models import Review
 from apps.locations.models import Address
 from tools.image_funcs import get_image_path
 
@@ -21,7 +22,7 @@ class Place(BaseAbstractModel):
     description = models.CharField(max_length=200, blank=True, null=True)
     status = models.CharField(max_length=18, choices=STATUS_CHOICES, blank=False, null=False, default=STATUS_WORKING)
     reviews = GenericRelation(
-        'feedbacks.Review',
+        Review,
         content_type_field='parent_object_type',
         object_id_field='parent_object_id',
     )

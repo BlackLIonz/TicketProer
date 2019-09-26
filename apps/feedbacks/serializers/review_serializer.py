@@ -17,9 +17,9 @@ class ReviewSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(required=False)
 
     parent_object_type_mapping = {
-        ContentType.objects.get_for_model(Place): PlaceSerializer,
-        ContentType.objects.get_for_model(Event): EventSerializer,
-        ContentType.objects.get_for_model(Organization): OrganizationSerializer,
+        Place: PlaceSerializer,
+        Event: EventSerializer,
+        Organization: OrganizationSerializer,
     }
 
     class Meta:
@@ -38,7 +38,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         """
         Method to fill out the organizer field in serializer
         """
-        serializer_class = self.parent_object_type_mapping.get(obj.parent_object_type)
+        serializer_class = self.parent_object_type_mapping.get(type(obj.parent_object))
         data = serializer_class(obj.parent_object).data
         return data
 
