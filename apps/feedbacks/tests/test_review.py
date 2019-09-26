@@ -14,31 +14,31 @@ class TestAddress:
         res = client.post('/api/reviews/',
                           data=json.dumps(review_dict),
                           content_type='application/json',
-                          **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
+                          **{'HTTP_AUTHORIZATION': f'Token {token}'})
         assert res.status_code == status.HTTP_201_CREATED
         res_dict = res.json()
         assert res_dict.get('parent_object_id') == review_dict['parent_object']
         assert res_dict.get('rating') == review_dict['rating']
         assert res_dict.get('text') == review_dict['text']
 
-    def test_create_with_organization(self, client, review_dict, user, token, organization):
+    def test_create_with_organization(self, client, review_dict, token, organization):
         review_dict['parent_object'] = str(organization.id)
         res = client.post('/api/reviews/',
                           data=json.dumps(review_dict),
                           content_type='application/json',
-                          **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
+                          **{'HTTP_AUTHORIZATION': f'Token {token}'})
         assert res.status_code == status.HTTP_201_CREATED
         res_dict = res.json()
         assert res_dict.get('parent_object_id') == review_dict['parent_object']
         assert res_dict.get('rating') == review_dict['rating']
         assert res_dict.get('text') == review_dict['text']
 
-    def test_create_with_place(self, client, review_dict, user, token, place):
+    def test_create_with_place(self, client, review_dict, token, place):
         review_dict['parent_object'] = str(place.id)
         res = client.post('/api/reviews/',
                           data=json.dumps(review_dict),
                           content_type='application/json',
-                          **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
+                          **{'HTTP_AUTHORIZATION': f'Token {token}'})
         assert res.status_code == status.HTTP_201_CREATED
         res_dict = res.json()
         assert res_dict.get('parent_object_id') == review_dict['parent_object']
@@ -48,7 +48,7 @@ class TestAddress:
     @pytest.mark.parametrize('review_qty', [10])
     def test_retrieve(self, client, reviews, review_qty):
         random_review = random.choice(Review.objects.all())
-        res = client.get(f'/api/reviews/{str(random_review.id)}/')
+        res = client.get(f'/api/reviews/{random_review.id}/')
         assert res.status_code == status.HTTP_200_OK
         res_dict = res.json()
         assert res_dict.get('id') == str(random_review.id)
@@ -61,3 +61,16 @@ class TestAddress:
         assert res.status_code == status.HTTP_200_OK
         res_dict = res.json()
         assert len(res_dict) == len(reviews)
+
+    def test_partial_update(self, client, user, token, reviews, review_dict):
+        user.is_staff = True
+        user.save()
+        random_review = random.choice(reviews)
+        res = client.put(f'/api/reviews/{random_review.id}/',
+                         data=json.dumps(review_dict),
+                         content_type='application/json',
+                         **{'HTTP_AUTHORIZATION': f'Token {token}'})
+        assert res.status_code == status.HTTP_200_OK
+        res_dict = res.json()
+        assert res_dict.get('text') == review_dict['text']
+        assert res_dict.get('rating') == review_dict['rating']

@@ -7,6 +7,7 @@ from faker import Factory as FakeFactory
 from apps.events.models import Event
 from apps.feedbacks.models import Review
 from apps.locations.models import Place
+from apps.users.factories import UserFactory
 from apps.users.models import User, Organization
 
 faker = FakeFactory.create()
@@ -24,7 +25,7 @@ class ReviewFactory(factory.django.DjangoModelFactory):
             list(Organization.objects.all()) + list(Event.objects.all()) + list(Place.objects.all())
         )
     )
-    created_by = factory.Iterator(User.objects.all())
+    created_by = factory.SubFactory(UserFactory)
     status = factory.fuzzy.FuzzyChoice(Review.STATUS_TYPES, getter=lambda c: c[0])
 
     class Meta:

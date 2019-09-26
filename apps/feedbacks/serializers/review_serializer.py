@@ -14,7 +14,7 @@ from apps.users.serializers import UserSerializer, OrganizationSerializer
 class ReviewSerializer(serializers.ModelSerializer):
     parent_object_type = serializers.SerializerMethodField()
     parent_object = serializers.SerializerMethodField()
-    create_by = UserSerializer(required=False)
+    created_by = UserSerializer(required=False)
 
     parent_object_type_mapping = {
         ContentType.objects.get_for_model(Place): PlaceSerializer,
@@ -31,6 +31,7 @@ class ReviewSerializer(serializers.ModelSerializer):
             'updated': {'read_only': True},
             'created_by': {'read_only': True},
             'parent_object': {'read_only': True},
+            'status': {'read_only': True},
         }
 
     def get_parent_object(self, obj=None):
@@ -38,7 +39,8 @@ class ReviewSerializer(serializers.ModelSerializer):
         Method to fill out the organizer field in serializer
         """
         serializer_class = self.parent_object_type_mapping.get(obj.parent_object_type)
-        return serializer_class(obj.parent_object).data
+        data = serializer_class(obj.parent_object).data
+        return {'id': str(data.get('id'))}
 
     def get_parent_object_type(self, obj=None):
         """
