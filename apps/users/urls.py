@@ -19,7 +19,7 @@ userpatterns = [
 userpatterns += router.urls
 
 organizationpatterns = [
-    path('', views.OrganizationsView.as_view()),
-    path('<str:organization_id>/', views.DetailsWithAllEventsOrganizationView.as_view()),
-    path('<str:organization_id>/detailed/', views.DetailedOrganizationView.as_view()),
+    path('', views.OrganizationsViewSet.as_view({'get': 'list'})),
+    path('<str:organization_id>/', views.OrganizationsViewSet.as_view({'get': 'retrieve'})),
+    path('<str:organization_id>/detailed/', views.OrganizationsViewSet.as_view({'get': 'detailed'})),
 ]

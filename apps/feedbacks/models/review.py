@@ -3,11 +3,11 @@ from django.core import validators
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
-from apps.base.models import BaseAbstractModel
+from apps.base.models import BaseAbstractModel, ParentTopicRelationModel
 from apps.users.models import User
 
 
-class Review(BaseAbstractModel):
+class Review(BaseAbstractModel, ParentTopicRelationModel):
     OK = 'OK'
     SUSPICIOUS = 'SUSPICIOUS'
     DELETED = 'DELETED'
