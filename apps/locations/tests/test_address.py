@@ -1,9 +1,8 @@
 import datetime
 import json
-
-import pytest
 import random
 
+import pytest
 import pytz
 from rest_framework import status
 
@@ -11,7 +10,7 @@ from apps.locations.models import Address
 
 
 @pytest.mark.django_db
-class TestAddress:
+class TestReview:
     def test_create_address(self, client, user, token, address_dict):
         res = client.post('/api/addresses/', data=address_dict, **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
         assert res.status_code == status.HTTP_201_CREATED

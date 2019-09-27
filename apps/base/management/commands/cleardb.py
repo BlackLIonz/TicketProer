@@ -1,9 +1,10 @@
 from django.core.management.base import BaseCommand
 
-from apps.users.models import User, Organization
-from apps.locations.models import Address, Place
 from apps.events.models import Event
+from apps.feedbacks.models import Review
+from apps.locations.models import Address, Place
 from apps.subscriptions.models import Subscription
+from apps.users.models import User, Organization
 
 
 class Command(BaseCommand):
@@ -14,4 +15,5 @@ class Command(BaseCommand):
         Address.objects.all().delete()
         Organization.objects.all().delete()
         User.objects.all().delete()
+        Review.objects.all().delete()
         self.stdout.write(self.style.SUCCESS('DB was successfully cleared'))

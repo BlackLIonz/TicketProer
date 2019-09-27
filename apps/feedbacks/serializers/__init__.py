@@ -1,0 +1,1 @@
+from apps.feedbacks.serializers.review_serializer import ReviewSerializer

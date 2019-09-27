@@ -1,7 +1,7 @@
 import pytest
 from pytest_factoryboy import register
-from rest_auth.models import TokenModel
 from rest_auth.app_settings import create_token, TokenSerializer
+from rest_auth.models import TokenModel
 
 from apps.events.factories import (
     EventUserWithoutPlaceFactory,

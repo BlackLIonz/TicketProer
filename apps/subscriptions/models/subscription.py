@@ -14,7 +14,7 @@ class Subscription(BaseAbstractModel):
         (STATUS_REJECTED, 'Rejected'),
         (STATUS_UNPAID, 'Unpaid'),
         (STATUS_UNTRACKED, 'Untracked'),
-        (STATUS_CANCELLED, 'Cancelled')
+        (STATUS_CANCELLED, 'Cancelled'),
     ]
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='subscriptions')
     event = models.ForeignKey('events.Event', on_delete=models.CASCADE, related_name='subscribers')
@@ -22,6 +22,10 @@ class Subscription(BaseAbstractModel):
 
     class Meta:
         unique_together = ['user', 'event']
+
+    def set_status(self, status):
+        self.status = status
+        self.save()
 
     def __str__(self):
         return f'{self.event.name}: {self.user.email}'

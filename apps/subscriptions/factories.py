@@ -1,13 +1,11 @@
-import factory
 import factory.fuzzy
 from faker import Factory as FakeFactory
 
-from apps.users.models import User
+from apps.events.factories import EventUserWithoutPlaceFactory
 from apps.events.models import Event
 from apps.subscriptions.models import Subscription
-from apps.events.factories import EventUserWithoutPlaceFactory
 from apps.users.factories import UserFactory
-
+from apps.users.models import User
 
 faker = FakeFactory.create()
 
@@ -21,7 +19,7 @@ class SubscriptionFactory(factory.django.DjangoModelFactory):
         model = Subscription
 
 
-class SubscriptionFactoryForTests(factory.django.DjangoModelFactory):
+class ForTestsSubscriptionFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     event = factory.SubFactory(EventUserWithoutPlaceFactory)
     status = factory.fuzzy.FuzzyChoice(Subscription.STATUS_CHOICES, getter=lambda c: c[0])

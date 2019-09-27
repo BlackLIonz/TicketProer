@@ -1,5 +1,3 @@
-from django.contrib.contenttypes.models import ContentType
-from django.db import models
 from rest_framework import serializers
 
 from apps.events.models import Event
@@ -14,12 +12,12 @@ from apps.users.serializers import UserSerializer, OrganizationSerializer
 class ReviewSerializer(serializers.ModelSerializer):
     parent_object_type = serializers.SerializerMethodField()
     parent_object = serializers.SerializerMethodField()
-    create_by = UserSerializer()
+    created_by = UserSerializer(required=False)
 
     parent_object_type_mapping = {
-        ContentType.objects.get_for_model(Place): PlaceSerializer,
-        ContentType.objects.get_for_model(Event): EventSerializer,
-        ContentType.objects.get_for_model(Organization): OrganizationSerializer,
+        Place: PlaceSerializer,
+        Event: EventSerializer,
+        Organization: OrganizationSerializer,
     }
 
     class Meta:
@@ -31,14 +29,16 @@ class ReviewSerializer(serializers.ModelSerializer):
             'updated': {'read_only': True},
             'created_by': {'read_only': True},
             'parent_object': {'read_only': True},
+            'status': {'read_only': True},
         }
 
     def get_parent_object(self, obj=None):
         """
-                Method to fill out the organizer field in serializer
-                """
-        serializer_class = self.parent_object_type_mapping.get(obj.organizer_type)
-        return serializer_class(obj.organizer).data
+        Method to fill out the organizer field in serializer
+        """
+        serializer_class = self.parent_object_type_mapping.get(type(obj.parent_object))
+        data = serializer_class(obj.parent_object).data
+        return data
 
     def get_parent_object_type(self, obj=None):
         """

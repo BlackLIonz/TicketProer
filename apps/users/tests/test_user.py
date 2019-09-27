@@ -1,7 +1,7 @@
-import pytest
-import iso8601
 from datetime import datetime
 
+import iso8601
+import pytest
 from rest_framework import status
 
 

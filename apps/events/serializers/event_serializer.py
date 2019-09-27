@@ -1,10 +1,10 @@
-from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
+from rest_framework import serializers
 
-from apps.users.models import Organization, User
+import apps.users.serializers as user_serializers
 from apps.events.models import Event
 from apps.locations.serializers import ShortPlaceSerializer, AddressSerializer
-import apps.users.serializers as user_serializers
+from apps.users.models import Organization, User
 
 
 class EventSerializer(serializers.ModelSerializer):

@@ -2,13 +2,15 @@ from datetime import datetime, timedelta
 
 
 import pytz
-from celery.utils.log import logger
+
+
 from django.core import validators
 from django.db import models
 from django.db.models import signals
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver
+
 
 from apps.base.models import BaseAbstractModel, ParentTopicRelationModel
 from apps.locations.models import Place, Address
@@ -17,13 +19,13 @@ from apps.subscriptions.tasks import delete_subscriptions
 
 
 class Event(BaseAbstractModel, ParentTopicRelationModel):
-    SOON = "SOON"
-    SUCCEED = "SUCCEED"
-    REJECTED = "REJECTED"
+    SOON = 'SOON'
+    SUCCEED = 'SUCCEED'
+    REJECTED = 'REJECTED'
     STATUS_TYPES = (
-        (SOON, "soon"),
-        (SUCCEED, "succeed"),
-        (REJECTED, "rejected"),
+        (SOON, 'soon'),
+        (SUCCEED, 'succeed'),
+        (REJECTED, 'rejected'),
     )
 
     name = models.CharField(max_length=64, blank=False, null=False)
@@ -46,6 +48,14 @@ class Event(BaseAbstractModel, ParentTopicRelationModel):
         validators.MaxValueValidator(10),
         validators.MinValueValidator(1)
     ])
+    reviews = GenericRelation(
+        'feedbacks.Review',
+        content_type_field='parent_object_type',
+        object_id_field='parent_object_id',
+    )
+
+    def __str__(self):
+        return self.name
 
     @property
     def registered_users(self):

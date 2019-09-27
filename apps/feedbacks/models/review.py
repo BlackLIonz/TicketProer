@@ -1,6 +1,6 @@
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import validators
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
 from apps.base.models import BaseAbstractModel, ParentTopicRelationModel
@@ -33,3 +33,6 @@ class Review(BaseAbstractModel, ParentTopicRelationModel):
 
     class Meta:
         unique_together = ['parent_object_id', 'created_by']
+
+    def __str__(self):
+        return f'Review from {self.created_by.username} on {self.parent_object.name}'

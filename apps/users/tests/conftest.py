@@ -2,9 +2,9 @@ import pytest
 from pytest_factoryboy import register
 from rest_auth.models import TokenModel
 
+from apps.events.factories import EventUserWithPlaceFactory
 from apps.locations.factories import PlaceFactory, AddressFactory
 from apps.users.factories import UserFactory, OrganizationFactory
-from apps.events.factories import EventUserWithPlaceFactory
 
 token_model = TokenModel
 register(UserFactory, 'user')

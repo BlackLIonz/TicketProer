@@ -1,6 +1,6 @@
 import pytest
-from rest_framework import status
 from rest_auth.models import TokenModel
+from rest_framework import status
 
 from apps.users.models import User
 

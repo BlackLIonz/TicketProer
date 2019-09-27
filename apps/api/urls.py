@@ -2,10 +2,11 @@ from django.urls import path, include
 from rest_auth.registration.views import RegisterView
 from rest_auth.views import LogoutView, LoginView
 
-from apps.locations.urls import placepatterns, addresspatterns
 from apps.events.urls import eventpatterns
+from apps.feedbacks.urls import reviewpatterns, commentpatterns
+from apps.locations.urls import placepatterns, addresspatterns
+from apps.subscriptions.urls import subscriptionpatterns
 from apps.users.urls import userpatterns, organizationpatterns
-
 
 app_name = 'api'
 
@@ -22,5 +23,8 @@ urlpatterns = [
     path('places/', include(placepatterns)),
     path('events/', include(eventpatterns)),
     path('addresses/', include(addresspatterns)),
-    path('organizations/', include(organizationpatterns))
+    path('organizations/', include(organizationpatterns)),
+    path('comments/', include(commentpatterns)),
+    path('subscriptions/', include(subscriptionpatterns)),
+    path('reviews/', include(reviewpatterns)),
 ]

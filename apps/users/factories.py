@@ -3,7 +3,6 @@ from faker import Factory as FakeFactory
 
 from apps.users.models import User, Organization, MembersList
 
-
 faker = FakeFactory.create()
 
 

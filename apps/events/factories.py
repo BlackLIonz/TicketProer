@@ -1,16 +1,14 @@
 import random
 
-import factory
 import factory.fuzzy
 import pytz
-from faker import Factory as FakeFactory
 from django.contrib.contenttypes.models import ContentType
+from faker import Factory as FakeFactory
 
-from apps.users.models import Organization
 from apps.events.models import Event
-from apps.users.factories import UserFactory, OrganizationFactory
 from apps.locations.factories import AddressFactory, PlaceFactory
-
+from apps.users.factories import UserFactory, OrganizationFactory
+from apps.users.models import Organization
 
 faker = FakeFactory.create()
 

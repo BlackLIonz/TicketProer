@@ -2,7 +2,6 @@ from rest_framework.routers import DefaultRouter
 
 from apps.locations import views
 
-
 place_router = DefaultRouter()
 address_router = DefaultRouter()
 

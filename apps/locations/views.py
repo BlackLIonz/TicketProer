@@ -1,25 +1,25 @@
-import json
-
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status, exceptions
-from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
 
+from apps.base.views import ReviewsMixin
 from apps.locations.models import Place, Address
 from apps.locations.serializers import PlaceSerializer, AddressSerializer
 from tools.action_based_permission import ActionBasedPermission
 from tools.custom_permissions import IsOwnerOrAdmin
 
 
-class PlaceViewSet(viewsets.ModelViewSet):
+class PlaceViewSet(viewsets.ModelViewSet, ReviewsMixin):
     """
-    A ViewSet for listing and retrieving Places
+    A viewset that provides `create()`, `retrieve()`, `update()`,
+    `partial_update()`, `destroy()` and `list()` actions.
     """
     queryset = Place.objects.all()
     serializer_class = PlaceSerializer
     permission_classes = (ActionBasedPermission,)
     action_permissions = {
-        AllowAny: ['retrieve', 'list'],
+        AllowAny: ['retrieve', 'list', 'reviews'],
         IsAdminUser: ['destroy', 'create', 'update', 'partial_update'],
     }
 

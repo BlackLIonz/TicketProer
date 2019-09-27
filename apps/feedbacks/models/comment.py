@@ -1,5 +1,5 @@
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from apps.base.models import BaseAbstractModel, ParentRelationModel
@@ -21,10 +21,10 @@ class Comment(BaseAbstractModel, ParentRelationModel):
     parent_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='parent_type')
     parent_id = models.UUIDField(editable=False)
     parent = GenericForeignKey('parent_type', 'parent_id')
-    author = models.ForeignKey(User, null=False, blank=False, editable=False,
+    created_by = models.ForeignKey(User, null=False, blank=False, editable=False,
                                on_delete=models.CASCADE, related_name='comments')
     text = models.TextField(null=False, blank=False)
     status = models.CharField(max_length=16, choices=STATUS_TYPES, default=OK)
 
     def __str__(self):
-        return f'{self.author.username}: {self.text[:10]+"..." if len(self.text)>10 else self.text}'
+        return f'{self.created_by.username}: {self.text[:10]+"..." if len(self.text)>10 else self.text}'

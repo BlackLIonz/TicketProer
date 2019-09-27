@@ -1,10 +1,9 @@
 import pytest
+from pytest_factoryboy import register
 from rest_auth.app_settings import create_token, TokenSerializer
 from rest_auth.models import TokenModel
-from pytest_factoryboy import register
 
 from apps.users.factories import UserFactory
-
 
 register(UserFactory, 'user')
 

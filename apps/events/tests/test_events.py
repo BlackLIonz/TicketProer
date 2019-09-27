@@ -2,12 +2,12 @@ import datetime
 import json
 
 import faker
-import pytz
 import pytest
+import pytz
 from rest_framework import status
 
-from apps.locations.models import Address, Place
 from apps.events.models import Event
+from apps.locations.models import Address, Place
 
 
 @pytest.mark.django_db

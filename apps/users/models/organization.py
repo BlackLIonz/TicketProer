@@ -1,8 +1,8 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
-from tools.image_funcs import get_image_path
 from apps.base.models import BaseAbstractModel, ParentTopicRelationModel
+from tools.image_funcs import get_image_path
 
 
 class Organization(BaseAbstractModel, ParentTopicRelationModel):
@@ -16,6 +16,11 @@ class Organization(BaseAbstractModel, ParentTopicRelationModel):
         content_type_field='organizer_type',
         object_id_field='organizer_id',
         related_name='events'
+    )
+    reviews = GenericRelation(
+        'feedbacks.Review',
+        content_type_field='parent_object_type',
+        object_id_field='parent_object_id',
     )
 
     class Meta:
