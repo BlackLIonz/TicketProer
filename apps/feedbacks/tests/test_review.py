@@ -77,7 +77,7 @@ class TestReview:
         res = client.put(f'/api/reviews/{random_review.id}/',
                          data=json.dumps(review_dict),
                          content_type='application/json',
-                         **{'HTTP_AUTHORIZATION': f'Token {user.auth_token}'})
+                         **{'HTTP_AUTHORIZATION': f'Token {token}'})
         assert res.status_code == status.HTTP_200_OK
         res_dict = res.json()
         assert res_dict.get('text') == review_dict['text']

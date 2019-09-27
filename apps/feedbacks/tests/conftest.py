@@ -23,7 +23,6 @@ def token(user):
 @pytest.fixture
 def review_dict():
     return {
-        'parent_object': '87746dc5-7cca-46c4-bd34-64bed7b6a4b4',
         'rating': 5,
         'text': 'Hello world'
     }

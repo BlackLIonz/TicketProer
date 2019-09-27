@@ -3,17 +3,16 @@ import uuid
 from django.contrib.contenttypes.models import ContentType
 from django_filters import rest_framework as filters
 from rest_framework import viewsets, mixins, status, exceptions, filters as rest_filters
-from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
+from apps.base.filters import AddressFilter, PlaceFilter, DateFilter
 from apps.base.views import ReviewsMixin
-from apps.users.models import User
-from apps.locations.models import Place, Address
-from apps.locations.serializers import AddressSerializer
-
 from apps.events.models import Event
 from apps.events.serializers import EventSerializer
-from apps.base.filters import AddressFilter, PlaceFilter, DateFilter
+from apps.locations.models import Place, Address
+from apps.locations.serializers import AddressSerializer
+from apps.users.models import User
 from tools.action_based_permission import ActionBasedPermission
 
 
@@ -44,8 +43,8 @@ class EventViewSet(mixins.CreateModelMixin,
     filter_backends = [filters.DjangoFilterBackend, rest_filters.OrderingFilter]
     filterset_class = EventFilter
 
-    ordering_fields = ("created",)
-    ordering = ("created",)
+    ordering_fields = ('created',)
+    ordering = ('created',)
 
     def create(self, request, *args, **kwargs):
         user = request.user
