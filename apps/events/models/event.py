@@ -1,13 +1,19 @@
 from datetime import datetime, timedelta
 
+
 import pytz
+from celery.utils.log import logger
+from django.core import validators
 from django.db import models
+from django.db.models import signals
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.dispatch import receiver
 
 from apps.base.models import BaseAbstractModel, ParentTopicRelationModel
 from apps.locations.models import Place, Address
 from tools.image_funcs import get_image_path
+from apps.subscriptions.tasks import delete_subscriptions
 
 
 class Event(BaseAbstractModel, ParentTopicRelationModel):
@@ -36,9 +42,10 @@ class Event(BaseAbstractModel, ParentTopicRelationModel):
     is_top = models.BooleanField(default=False)
     max_members = models.PositiveIntegerField(blank=False, null=False)
     status = models.CharField(max_length=16, choices=STATUS_TYPES, default=SOON)
-
-    def __str__(self):
-        return self.name
+    rating = models.PositiveSmallIntegerField(default=0, blank=False, null=False, validators=[
+        validators.MaxValueValidator(10),
+        validators.MinValueValidator(1)
+    ])
 
     @property
     def registered_users(self):
@@ -51,3 +58,8 @@ class Event(BaseAbstractModel, ParentTopicRelationModel):
     @property
     def is_available_for_subscription(self):
         return True if datetime.utcnow().replace(tzinfo=pytz.utc) <= self.date - timedelta(hours=1) else False
+
+
+@receiver(signals.pre_save, sender=Event, dispatch_uid="on_status_change")
+def on_status_active_save(sender, instance, **kwargs):
+    delete_subscriptions.apply_async(args=[instance.id], eta=instance.date - timedelta(hours=1))

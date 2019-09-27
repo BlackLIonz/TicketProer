@@ -90,3 +90,5 @@ local_settings.py
 venv
 db.sqlite3
 ./pytest_cache
+celerybeat.pid
+celerybeat-schedule

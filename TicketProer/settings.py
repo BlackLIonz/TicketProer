@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
+
+from celery.schedules import crontab
 
 from tools.env_funcs import get_env
 
@@ -55,6 +58,7 @@ INSTALLED_APPS = [
     'apps.subscriptions',
     'apps.api',
     'apps.feedbacks',
+    'django_celery_beat'
 ]
 
 CELERY_BROKER_URL = 'redis://redis:6379'
@@ -62,6 +66,13 @@ CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULE = {
+ 'count-rating-every-five-minutes': {
+       'task': 'rating',
+       'schedule': 15.0,
+    },
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
