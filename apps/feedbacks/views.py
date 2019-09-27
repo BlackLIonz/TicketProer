@@ -85,7 +85,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
         serializer_class = self.get_serializer_class()
         review = serializer_class(data=data)
         review.is_valid(raise_exception=True)
-        review = self.perform_create(review, created_by=user, parent_object=parent_object)
+        review = self.perform_create(review,
+                                     created_by=user,
+                                     parent_object_id=parent_object.id,
+                                     parent_object_type=ContentType.objects.get_for_model(type(parent_object)))
         review_data = serializer_class(review).data
         headers = self.get_success_headers(review_data)
         return Response(review_data, status=status.HTTP_201_CREATED, headers=headers)
@@ -98,13 +101,14 @@ class ReviewViewSet(viewsets.ModelViewSet):
         if parent_object is None:
             raise exceptions.NotFound('Place/Event/Organization not found')
         parent_object_type = ContentType.objects.get_for_model(parent_object.__class__)
-        data['parent_object_it'] = parent_object_id
+        data['parent_object_id'] = parent_object_id
         data['parent_object_type'] = parent_object_type
         return parent_object
 
     def perform_create(self, serializer, **kwargs):
-        try:
-            review = Review.objects.create(**kwargs, **serializer.validated_data)
-        except IntegrityError:
-            review = Review.objects.get(**kwargs).update(**kwargs, **serializer)
-        return review
+        review = Review.objects.filter(created_by=kwargs['created_by'], parent_object_id=kwargs['parent_object_id'])
+        if review.exists():
+            review = review.first()
+            raise exceptions.APIException(detail=f'Review already exists, at {review.id}', code=status.HTTP_200_OK)
+        else:
+            return Review.objects.create(**kwargs, **serializer.validated_data)

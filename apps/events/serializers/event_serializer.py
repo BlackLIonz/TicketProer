@@ -1,10 +1,10 @@
-from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
+from rest_framework import serializers
 
-from apps.users.models import Organization, User
+import apps.users.serializers as user_serializers
 from apps.events.models import Event
 from apps.locations.serializers import ShortPlaceSerializer, AddressSerializer
-import apps.users.serializers as user_serializers
+from apps.users.models import Organization, User
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class EventSerializer(serializers.ModelSerializer):
         """
         organizer_type_mapping = {
             ContentType.objects.get_for_model(User): user_serializers.ShortUserSerializer,
-            ContentType.objects.get_for_model(Organization): user_serializers.OrganizationSerializer
+            ContentType.objects.get_for_model(Organization): user_serializers.ShortOrganizationSerializer
         }
         serializer_class = organizer_type_mapping.get(obj.organizer_type)
         return serializer_class(obj.organizer).data

@@ -41,19 +41,19 @@ def reviews(review_qty, users, events, places, organizations):
 
 @pytest.fixture
 def places():
-    return PlaceFactory.create_batch(size=50)
+    return PlaceFactory.create_batch(size=100)
 
 
 @pytest.fixture
 def events():
-    return EventOrganizerWithPlaceFactory.create_batch(size=50)
+    return EventOrganizerWithPlaceFactory.create_batch(size=10)
 
 
 @pytest.fixture
 def organizations():
-    return OrganizationFactory.create_batch(size=50)
+    return OrganizationFactory.create_batch(size=10)
 
 
 @pytest.fixture
 def users():
-    return UserFactory.create_batch(size=50)
+    return UserFactory.create_batch(size=10)
