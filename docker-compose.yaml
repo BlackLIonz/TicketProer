@@ -25,3 +25,11 @@ services:
       - .:/code
     depends_on:
       - redis
+  celery-beat:
+    build: .
+    command: celery -A TicketProer beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis

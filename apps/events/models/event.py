@@ -70,6 +70,8 @@ class Event(BaseAbstractModel, ParentTopicRelationModel):
         return True if datetime.utcnow().replace(tzinfo=pytz.utc) <= self.date - timedelta(hours=1) else False
 
 
-@receiver(signals.pre_save, sender=Event, dispatch_uid="on_status_change")
+@receiver(signals.pre_save, sender=Event)
 def on_status_active_save(sender, instance, **kwargs):
-    delete_subscriptions.apply_async(args=[instance.id], eta=instance.date - timedelta(hours=1))
+    old_instance = Event.objects.get(id=instance.id)
+    if instance.is_approved and not old_instance.is_approved:
+        delete_subscriptions.apply_async(args=[instance.id], eta=instance.date - timedelta(hours=1))
