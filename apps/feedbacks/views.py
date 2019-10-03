@@ -6,7 +6,9 @@ from rest_framework import filters as rest_filters
 from rest_framework import viewsets, status, exceptions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-
+from django.utils.decorators import method_decorator
+from drf_yasg.openapi import Response as SwgResponse
+from drf_yasg.utils import swagger_auto_schema
 from apps.events.models import Event
 from apps.feedbacks.models import Comment, Review
 from apps.feedbacks.serializers import ReviewSerializer
@@ -28,6 +30,69 @@ class RatingFilter(filters.FilterSet):
         fields = ['rating_gte', 'rating_lte']
 
 
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    operation_summary='Gives detailed information about reviews.',
+    operation_description="""Gives detailed information about reviews.
+                             This endpoint is reachable by any.""",
+    responses={
+        '200': SwgResponse('Ok. Review returned.', ReviewSerializer()),
+        '404': 'Not found. Bad review id.',
+    }
+    )
+)
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_summary='Gives list of all reviews.',
+    operation_description="""Gives list of all reviews.
+                             This endpoint is reachable by any.""",
+    responses={
+        '200': SwgResponse('Ok. Reviews returned.', ReviewSerializer()),
+        '404': 'Not found. Bad review id.',
+    }
+    )
+)
+@method_decorator(name='create', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that creates a review.',
+    operation_description="""Creates review for Place/Organizations/Event.
+                             This endpoint is reachable by any.""",
+    responses={
+        '200': SwgResponse('Ok. Reviews returned.', ReviewSerializer()),
+        '404': 'Not found. Parent object not found.',
+        '403': 'Event is not available for feedbacks.',
+    }
+    )
+)
+@method_decorator(name='destroy', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that deletes a review.',
+    operation_description="""Deletes review for Place/Organizations/Event.
+                             This endpoint is reachable by author or staff.""",
+    responses={
+        '205': SwgResponse('Ok. Review deleted.', ReviewSerializer()),
+        '404': 'Not found. Review not found.',
+    }
+    )
+)
+@method_decorator(name='update', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that updates a review.',
+    operation_description="""Updates review for Place/Organizations/Event.
+                             This endpoint is reachable by author or staff.""",
+    responses={
+        '200': SwgResponse('Ok. Review updated.', ReviewSerializer()),
+        '403': 'You can not create reviews on it.',
+        '404': 'Not found. Review not found.',
+    }
+    )
+)
+@method_decorator(name='partial_update', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that updates a review.',
+    operation_description="""Updates review for Place/Organizations/Event.
+                             This endpoint is reachable by author or staff.""",
+    responses={
+        '200': SwgResponse('Ok. Review updated.', ReviewSerializer()),
+        '403': 'You can not create reviews on it.',
+        '404': 'Not found. Review not found.',
+    }
+    )
+)
 class ReviewViewSet(viewsets.ModelViewSet):
     """
     A viewset that provides default `create()`, `retrieve()`, `update()`,

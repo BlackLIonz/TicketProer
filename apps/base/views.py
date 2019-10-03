@@ -1,3 +1,6 @@
+from django.utils.decorators import method_decorator
+from drf_yasg.openapi import Response as SwgResponse
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -5,6 +8,16 @@ from rest_framework.response import Response
 from apps.feedbacks.serializers import ReviewSerializer
 
 
+@method_decorator(name='reviews', decorator=swagger_auto_schema(
+    operation_summary='List method that gives information about all reviews.',
+    operation_description="""Gives detailed information about all reviews.
+                             This endpoint is reachable by any.""",
+    responses={
+        '200': SwgResponse('Ok. Reviews returned.', ReviewSerializer()),
+        '404': 'Not found. Bad id.',
+    }
+    )
+)
 class ReviewsMixin(viewsets.GenericViewSet):
 
     @action(detail=True, methods=['get'])

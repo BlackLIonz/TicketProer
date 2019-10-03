@@ -22,6 +22,8 @@ class IsSubscriberOrAdmin(BasePermission):
 class IsVisited(BasePermission):
     """Access have only who visited event"""
     def has_object_permission(self, request, view, obj):
-        events = [sub.event for sub in request.user.all_active_subscriptions if sub.event.status == Event.SUCCEED]
-        return bool(obj in events)
+        if type(obj) is Event:
+            events = [sub.event for sub in request.user.all_active_subscriptions if sub.event.status == Event.SUCCEED]
+            return bool(obj in events)
+        return True
 
