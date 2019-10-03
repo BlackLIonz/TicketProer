@@ -123,6 +123,61 @@ class PlaceViewSet(viewsets.ModelViewSet, ReviewsMixin):
         return Place.objects.create(**kwargs, **serializer.validated_data)
 
 
+@method_decorator(name='partial_update', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that updates a Address.',
+    operation_description="""Updates a Address.
+                             This endpoint is reachable by author or staff.""",
+    responses={
+        '200': SwgResponse('Ok. Address updated.', AddressSerializer()),
+    }
+    )
+)
+@method_decorator(name='update', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that updates a Address.',
+    operation_description="""Updates a Address.
+                             This endpoint is reachable by author or staff.""",
+    responses={
+        '200': SwgResponse('Ok. Address updated.', AddressSerializer()),
+    }
+    )
+)
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that gets detail info about Address.',
+    operation_description="""Gets detail info about Address.
+                             This endpoint is reachable by any.""",
+    responses={
+        '200': SwgResponse('Ok. Place returned.', AddressSerializer()),
+        '404': SwgResponse('Address not found'),
+    }
+    )
+)
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that gets all Addresses.',
+    operation_description="""Gets all Addresses.
+                             This endpoint is reachable by any.""",
+    responses={
+        '200': SwgResponse('Ok. Places returned.', AddressSerializer()),
+    }
+    )
+)
+@method_decorator(name='create', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that creates a Address.',
+    operation_description="""Creates a Address.
+                             This endpoint is reachable by authenticated users.""",
+    responses={
+        '201': SwgResponse('Ok. Address created.', AddressSerializer()),
+    }
+    )
+)
+@method_decorator(name='destroy', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that destroys a Address.',
+    operation_description="""Destroys a Address.
+                             This endpoint is reachable by staff.""",
+    responses={
+        '205': SwgResponse('Ok. Address destroyed.', AddressSerializer()),
+    }
+    )
+)
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
