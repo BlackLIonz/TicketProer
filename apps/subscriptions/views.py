@@ -5,6 +5,9 @@ from rest_framework import viewsets, exceptions, status, filters as rest_filters
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg.openapi import Response as SwgResponse
 
 from apps.events.models import Event
 from apps.subscriptions.models import Subscription
@@ -26,6 +29,94 @@ class SubscriptionFilter(filters.FilterSet):
         }
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that lists all subscriptions.',
+    operation_description="""Lists all created Subscriptions.
+                             This endpoint is reachable by staff only.
+                             It is possible to filter list by:
+                                1) Event
+                                2) User
+                                3) Status
+                                4) Event date
+                                5) Event organizer type
+                                6) Event organizer id""",
+    responses={
+        '200': SwgResponse('Ok. List returned.', SubscriptionSerializer()),
+    }
+    )
+)
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that gives detailed information about subscription.',
+    operation_description="""Gives detailed information about Subscription.
+                             This endpoint is reachable by staff or User from Subscription.""",
+    responses={
+        '200': SwgResponse('Ok. Subscription returned.', SubscriptionSerializer()),
+        '403': 'Forbidden. Neither staff user nor User from Subscription.',
+        '404': 'Not found. Bad Subscription id.',
+    }
+    )
+)
+@method_decorator(name='create', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that creates a subscription.',
+    operation_description="""Creates a Subscription for the transmitted Event.
+                             This endpoint is reachable by authenticated users.""",
+    responses={
+        '201': SwgResponse('Ok. Subscription created.', SubscriptionSerializer()),
+        '400': 'Bad request.',
+        '401': 'Not authorized.',
+        '403': 'Forbidden.',
+        '404': 'Not found.',
+        '409': 'Conflict. Subscription already exists.',
+    }
+    )
+)
+@method_decorator(name='approve', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that approves subscription.',
+    operation_description="""Sets Subscription status to ACTIVE.
+                             This endpoint is reachable by authenticated users.""",
+    responses={
+        '200': SwgResponse('Ok. Subscription approved.', SubscriptionSerializer()),
+        '400': 'Bad request.',
+        '401': 'Not authorized.',
+        '403': 'Forbidden.',
+        '404': 'Not found.',
+        '409': 'Conflict. Subscription already exists.',
+    }
+    )
+)
+@method_decorator(name='update', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that updates subscription.',
+    operation_description="""Updates Subscription.
+                             This endpoint is reachable by staff users only.""",
+    responses={
+        '200': SwgResponse('Ok. Subscription updated.', SubscriptionSerializer()),
+        '403': 'Forbidden. Not a staff user.',
+        '404': 'Not found. Bad Subscription id.',
+    }
+    )
+)
+@method_decorator(name='partial_update', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that updates subscription.',
+    operation_description="""Updates Subscription.
+                             This endpoint is reachable by staff users only.""",
+    responses={
+        '200': SwgResponse('Ok. Subscription updated.', SubscriptionSerializer()),
+        '403': 'Forbidden. Not a staff user.',
+        '404': 'Not found. Bad Subscription id.',
+    }
+    )
+)
+@method_decorator(name='destroy', decorator=swagger_auto_schema(
+    operation_summary='Endpoint that deletes subscription.',
+    operation_description="""Deletes Subscription.
+                             This endpoint is reachable by authenticated users.""",
+    responses={
+        '204': 'No content.',
+        '403': 'Forbidden. Not a staff user.',
+        '404': 'Not found. Bad Subscription id.',
+    }
+    )
+)
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
@@ -124,8 +215,14 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_summary='''Calls list method and returns user's subscriptions list if user is authorized.
+                        Filtering and ordering by date implemented.''',
+    responses={
+        '200': SwgResponse('OK. User\'s subscriptions were successfully returned.', SubscriptionSerializer()),
+        '401': 'Unauthorized'
+    }))
 class SubscriptionMeViewSet(viewsets.ReadOnlyModelViewSet):
-
     model = Subscription
     serializer_class = SubscriptionSerializer
     filter_backends = [filters.DjangoFilterBackend, rest_filters.OrderingFilter]

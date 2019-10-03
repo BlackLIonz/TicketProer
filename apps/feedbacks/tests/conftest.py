@@ -80,7 +80,7 @@ def reviews(review_qty, users, events, places, organizations):
 
 @pytest.fixture
 def places():
-    return PlaceFactory.create_batch(size=100)
+    return PlaceFactory.create_batch(size=10)
 
 
 @pytest.fixture

@@ -372,7 +372,7 @@ class TestEventsCreate:
         assert str(db_event.address.id) == res_event.get('address').get('id')
 
     def test_create_event_with_empty_place_and_address_id_in_dict(self, client, user, address, token, event_dict):
-        address = Address.objects.all()[0]
+        address = Address.objects.first()
         address_id = {
             'id': str(address.id)
         }
@@ -406,7 +406,7 @@ class TestEventsCreate:
         assert str(db_event.address.id) == res_event.get('address').get('id')
 
     def test_create_event_with_empty_place_and_address_id_in_str(self, client, user, address, token, event_dict):
-        address = Address.objects.all()[0]
+        address = Address.objects.first()
         event_dict.pop('place')
         event_dict.update(address=str(address.id))
         res = client.post('/api/events/', data=json.dumps(event_dict),
@@ -437,7 +437,7 @@ class TestEventsCreate:
         assert str(db_event.address.id) == res_event.get('address').get('id')
 
     def test_create_event_with_place_none_and_address_id_in_dict(self, client, user, address, token, event_dict):
-        address = Address.objects.all()[0]
+        address = Address.objects.first()
         address_id = {
             'id': str(address.id)
         }
@@ -470,7 +470,7 @@ class TestEventsCreate:
         assert str(db_event.address.id) == res_event.get('address').get('id')
 
     def test_create_event_with_place_none_and_address_id_in_str(self, client, user, address, token, event_dict):
-        address = Address.objects.all()[0]
+        address = Address.objects.first()
         event_dict.update(address=str(address.id))
         res = client.post('/api/events/', data=json.dumps(event_dict),
                           content_type='application/json',
@@ -560,7 +560,7 @@ class TestEventsCreate:
 
     def test_create_event_with_place_id_in_str_and_any_address_data(self, client, user, token, place, event_dict,
                                                                     address_dict):
-        place = Place.objects.all()[0]
+        place = Place.objects.first()
         event_dict.update(place=str(place.id))
         event_dict.update(address=address_dict)
         res = client.post('/api/events/', data=json.dumps(event_dict),
@@ -593,7 +593,7 @@ class TestEventsCreate:
 
     def test_create_event_with_place_id_in_dict_and_any_address_data(self, client, user, token, place, event_dict,
                                                                      address_dict):
-        place = Place.objects.all()[0]
+        place = Place.objects.first()
         place_id = {
             'id': str(place.id)
         }

@@ -75,6 +75,8 @@ class TestReview:
         user.is_staff = True
         user.save()
         random_review = random.choice(reviews)
+        random_review.status = Review.OK
+        random_review.save()
         res = client.put(f'/api/reviews/{random_review.id}/',
                          data=json.dumps(review_dict),
                          content_type='application/json',

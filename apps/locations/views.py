@@ -5,12 +5,16 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status, exceptions
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg.openapi import Response as SwgResponse
 
 from apps.base.views import ReviewsMixin
 from apps.locations.models import Place, Address
 from apps.locations.serializers import PlaceSerializer, AddressSerializer
 from tools.action_based_permission import ActionBasedPermission
 from tools.custom_permissions import IsOwnerOrAdmin
+
 
 
 @method_decorator(name='create', decorator=swagger_auto_schema(

@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.contenttypes.models import ContentType
+from django.utils.decorators import method_decorator
 from django_filters import rest_framework as filters
 from rest_framework import filters as rest_filters
 from rest_framework import viewsets, status, exceptions
@@ -9,6 +10,7 @@ from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 from drf_yasg.openapi import Response as SwgResponse
 from drf_yasg.utils import swagger_auto_schema
+
 from apps.events.models import Event
 from apps.feedbacks.models import Comment, Review
 from apps.feedbacks.serializers import ReviewSerializer
@@ -129,6 +131,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.status = Review.DELETED
+        instance.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_destroy(self, instance):
@@ -183,6 +186,77 @@ class ReviewViewSet(viewsets.ModelViewSet):
             return Review.objects.create(**kwargs, **serializer.validated_data)
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_summary='This endpoint returns list of all created Comments',
+    operation_description=
+    """
+        This list of comments supports two different ways of displaying information: 
+        1) All comments for a user who is a stuff
+        2) All comments with non-deleted status for non-stuff users
+    """,
+    responses={
+        '200': SwgResponse('`Ok` List returned', CommentSerializer()),
+    }
+))
+@method_decorator(name='create', decorator=swagger_auto_schema(
+    operation_summary='This endpoint creates new Comment',
+    operation_description=
+    """
+        Only authenticated users can create Comments
+        Options how to create Comment:
+        1) Comment's parent can be Place, Event, Organization, Feedback or Comment instance
+        2) Comment's topic can be Place, Event, Organization or Feedback instance
+    """,
+    responses={
+        '201': SwgResponse('`Created` New Event returned', CommentSerializer()),
+        '400': 'Bad request',
+        '404': 'Not found',
+    }
+))
+@method_decorator(name='retrieve', decorator=swagger_auto_schema(
+    operation_summary='This endpoint represents detailed information of the Comment',
+    operation_description=
+    """
+        Collects and represents detailed information about any existed comment
+    """,
+    responses={
+        '200': SwgResponse('Ok. Detailed information returned', CommentSerializer()),
+        '404': 'Not Found',
+    }
+))
+@method_decorator(name='update', decorator=swagger_auto_schema(
+    operation_summary='This endpoint gets ability to update any existed Comment',
+    operation_description=
+    """
+        Comment can be updated only by user who created this comment
+    """,
+    responses={
+        '201': SwgResponse('Ok. Detailed information returned', CommentSerializer()),
+        '404': 'Not Found',
+    }
+))
+@method_decorator(name='partial_update', decorator=swagger_auto_schema(
+    operation_summary='This endpoint gets ability to update text of any existed Comment',
+    operation_description=
+    """
+        Comment can be partially updated only by user who created this comment
+    """,
+    responses={
+        '201': SwgResponse('Ok. Detailed information returned', CommentSerializer()),
+        '404': 'Not Found',
+    }
+))
+@method_decorator(name='destroy', decorator=swagger_auto_schema(
+    operation_summary='This endpoint changes Comment instance\'s status to Deleted',
+    operation_description=
+    """
+        Only admin or user who created the comment can "delete" this comment
+    """,
+    responses={
+        '204': SwgResponse('No content', CommentSerializer()),
+        '404': 'Not Found',
+    }
+))
 class CommentViewSet(viewsets.ModelViewSet):
     """
     A viewset for Comment model, which provides
@@ -199,12 +273,14 @@ class CommentViewSet(viewsets.ModelViewSet):
         IsOwnerOrAdmin: ['destroy'],
     }
 
-    def list(self, request, *args, **kwargs):
-        if request.user.is_staff:
-            queryset = self.filter_queryset(self.get_queryset())
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Comment.objects.all()
         else:
-            queryset = self.filter_queryset(self.get_queryset().exclude(status=Comment.DELETED))
+            return Comment.objects.exclude(status=Comment.DELETED)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

@@ -12,9 +12,7 @@ from apps.users.models import Organization
 @pytest.mark.django_db
 class TestComment:
     def test_negative_create_comment_unauthenticated_user(self, client, comment_dict, user, event2):
-        user.save()
-        event2.save()
-        myevent = Event.objects.all()[0]
+        myevent = Event.objects.first()
         comment_dict.update(parent={'id': str(myevent.id)})
         comment_dict.update(parent_type=myevent.__class__.__name__)
         comment_dict.update(topic={'id': str(myevent.id)})
@@ -24,9 +22,7 @@ class TestComment:
         assert res.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_create_comment_to_event(self, client, comment_dict, user, token, event2):
-        user.save()
-        event2.save()
-        myobj = Event.objects.all()[0]
+        myobj = Event.objects.first()
         comment_dict.update(parent={'id': str(myobj.id)})
         comment_dict.update(parent_type=myobj.__class__.__name__)
         comment_dict.update(topic={'id': str(myobj.id)})
@@ -41,9 +37,7 @@ class TestComment:
         assert db_comment.text == res_obj.get('text')
 
     def test_create_comment_to_organization(self, client, comment_dict, user, token, organization):
-        user.save()
-        organization.save()
-        myobj = Organization.objects.all()[0]
+        myobj = Organization.objects.first()
         comment_dict.update(parent={'id': str(myobj.id)})
         comment_dict.update(parent_type=myobj.__class__.__name__)
         comment_dict.update(topic={'id': str(myobj.id)})
@@ -58,9 +52,7 @@ class TestComment:
         assert db_comment.text == res_obj.get('text')
 
     def test_create_comment_to_place(self, client, comment_dict, user, token, place):
-        user.save()
-        place.save()
-        myobj = Place.objects.all()[0]
+        myobj = Place.objects.first()
         comment_dict.update(parent={'id': str(myobj.id)})
         comment_dict.update(parent_type=myobj.__class__.__name__)
         comment_dict.update(topic={'id': str(myobj.id)})
@@ -75,8 +67,9 @@ class TestComment:
         assert db_comment.text == res_obj.get('text')
 
     def test_create_comment_to_review(self, client, comment_dict, user, token, review):
-        user.save()
-        myobj = Review.objects.all()[0]
+        myobj = Review.objects.first()
+        myobj.status = Review.OK
+        myobj.save()
         comment_dict.update(parent={'id': str(myobj.id)})
         comment_dict.update(parent_type=myobj.__class__.__name__)
         comment_dict.update(topic={'id': str(myobj.id)})
@@ -91,9 +84,7 @@ class TestComment:
         assert db_comment.text == res_obj.get('text')
 
     def test_create_comment_to_comment(self, client, comment_dict, user, token, organization):
-        user.save()
-        organization.save()
-        myobj = Organization.objects.all()[0]
+        myobj = Organization.objects.first()
         comment_dict.update(parent={'id': str(myobj.id)})
         comment_dict.update(parent_type=myobj.__class__.__name__)
         comment_dict.update(topic={'id': str(myobj.id)})
@@ -101,7 +92,7 @@ class TestComment:
         client.post('/api/comments/', data=json.dumps(comment_dict),
                     content_type='application/json',
                     **{'HTTP_AUTHORIZATION': 'Token ' + str(token)})
-        myobj_2 = Comment.objects.all()[0]
+        myobj_2 = Comment.objects.first()
         comment_dict.update(parent={'id': str(myobj_2.id)})
         comment_dict.update(parent_type=myobj_2.__class__.__name__)
         comment_dict.update(topic={'id': str(myobj.id)})
